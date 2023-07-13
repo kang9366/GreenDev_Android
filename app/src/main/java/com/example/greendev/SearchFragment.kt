@@ -22,7 +22,7 @@ class SearchFragment : Fragment() {
         item.add(CampaignData("다다익선 캠페인","스타벅스"))
         item.add(CampaignData("다다익선 캠페인","스타벅스"))
 
-        val adapter = RecyclerViewAdapter(item)
+        val adapter = RecyclerViewAdapter(item, R.layout.campaign_item_layout)
         binding.recyclerView.adapter = adapter
     }
 
