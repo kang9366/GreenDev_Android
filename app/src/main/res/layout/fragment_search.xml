@@ -5,6 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
     android:fillViewport="true" >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,22 +19,19 @@
             android:layout_height="wrap_content"
             android:text="검색"
             android:fontFamily="@font/gmarketsansttfmedium"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="31dp"
             android:layout_marginTop="31dp"/>
 
         <EditText
             android:id="@+id/searchView"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="40dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title_text"
-            android:layout_marginStart="34dp"
-            android:layout_marginEnd="34dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/search_bar"
             android:paddingStart="10dp"
@@ -54,11 +53,10 @@
             android:layout_height="wrap_content"
             android:text="전체 캠페인"
             android:fontFamily="@font/gmarketsansttfmedium"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/searchView"
-            android:layout_marginStart="31dp"
             android:layout_marginTop="51dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -69,9 +67,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/all_campaign"
             android:layout_marginTop="15dp"
-            android:layout_marginStart="29dp"
-            android:layout_marginEnd="29dp"
-            android:nestedScrollingEnabled="false"/>
+            android:nestedScrollingEnabled="false"
+            tools:listitem="@layout/campaign_item_layout"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

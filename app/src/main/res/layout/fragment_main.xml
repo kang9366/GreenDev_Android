@@ -43,11 +43,17 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="33dp"
-        android:layout_height="166dp"
-        app:layout_constraintStart_toStartOf="@+id/logo_image"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/campaign"
-        android:layout_marginTop="30dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="15dp"
+        tools:listitem="@layout/main_campaign_item_layout"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     <TextView
         android:id="@+id/record_text"
