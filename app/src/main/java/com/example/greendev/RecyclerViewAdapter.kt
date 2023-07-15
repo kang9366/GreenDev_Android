@@ -51,4 +51,10 @@ class RecyclerViewAdapter(private var items: ArrayList<CampaignData>, private va
     fun setOnItemClickListener(listener : OnItemClickListener) {
         this.listener = listener
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setItem(filteredItem: ArrayList<CampaignData>){
+        items = filteredItem
+        notifyDataSetChanged()
+    }
 }
