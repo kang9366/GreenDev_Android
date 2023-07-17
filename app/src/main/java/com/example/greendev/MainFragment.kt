@@ -12,6 +12,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentMainBinding.bind(view)
         val item = ArrayList<CampaignData>()
+        val recordItem = ArrayList<RecordData>()
 
         //recycerview test
         item.add(CampaignData("다다익선 캠페인","스타벅스"))
@@ -21,8 +22,19 @@ class MainFragment : Fragment() {
         item.add(CampaignData("다다익선 캠페인","스타벅스"))
         item.add(CampaignData("다다익선 캠페인","스타벅스"))
 
+        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
+        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
+        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
+        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
+        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
+        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
+        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
+
         val adapter = RecyclerViewAdapter(item, R.layout.main_campaign_item_layout)
+        val recordAdapter = RecordRecyclerViewAdapter(recordItem)
+
         binding.recyclerView.adapter = adapter
+        binding.recordRecyclerView.adapter = recordAdapter
     }
 
     override fun onCreateView(
