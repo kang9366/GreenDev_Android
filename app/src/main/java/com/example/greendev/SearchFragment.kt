@@ -71,6 +71,7 @@ class SearchFragment : Fragment() {
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
                 transaction?.apply {
                     replace(R.id.frameLayout, ApplyFragment())
+                    addToBackStack(null)
                     commit()
                 }
             }
