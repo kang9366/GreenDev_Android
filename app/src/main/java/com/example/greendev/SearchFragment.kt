@@ -25,11 +25,6 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSearchBinding.bind(view)
 
-        binding.layout.setOnTouchListener { _, _ ->
-            hideKeyboard()
-            false
-        }
-
         val item = ArrayList<CampaignData>()
         val search_item = ArrayList<CampaignData>()
 
@@ -82,6 +77,10 @@ class SearchFragment : Fragment() {
         })
 
         binding.recyclerView.adapter = adapter
+        binding.layout.setOnTouchListener(OnTouchListener { _, _ ->
+            hideKeyboard()
+            false
+        })
     }
 
     override fun onCreateView(
