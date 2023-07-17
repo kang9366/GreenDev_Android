@@ -1,6 +1,7 @@
 package com.example.greendev
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,13 @@ class RecordFragment : Fragment() {
 
         val adapter = RecordRecyclerViewAdapter(item)
         binding.recyclerView.adapter = adapter
+        binding.backButton.setOnClickListener {
+            activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.remove(this)
+                ?.commit()
+            activity?.supportFragmentManager?.popBackStack()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
