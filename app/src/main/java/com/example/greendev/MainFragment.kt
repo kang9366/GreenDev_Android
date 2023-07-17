@@ -1,5 +1,6 @@
 package com.example.greendev
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -35,6 +36,19 @@ class MainFragment : Fragment() {
 
         binding.recyclerView.adapter = adapter
         binding.recordRecyclerView.adapter = recordAdapter
+
+        adapter.setOnItemClickListener(object : RecyclerViewAdapter.OnItemClickListener {
+            @SuppressLint("ResourceType")
+            override fun onItemClick(v: View, data: CampaignData, pos: Int) {
+                val transaction = activity?.supportFragmentManager?.beginTransaction()
+                transaction?.apply {
+                    replace(R.id.frameLayout, RecordFragment())
+                    addToBackStack(null)
+                    commit()
+                }
+            }
+        })
+        binding.recyclerView.adapter = adapter
     }
 
     override fun onCreateView(
