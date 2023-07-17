@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:id="@+id/logo_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_campaign"
+        android:background="@drawable/round_background"
+        android:backgroundTint="#E8EAEE"/>
+
+    <TextView
+        android:id="@+id/campaign_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/logo_image"
+        app:layout_constraintTop_toTopOf="@+id/logo_image"
+        android:layout_marginStart="20dp"
+        android:text="다다익선 캠페인"
+        android:textSize="18sp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:textColor="@color/black"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/campaign_title"
+        app:layout_constraintBottom_toBottomOf="@id/logo_image"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="오늘도 실천했어요~"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/campaign_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="2023.07.14"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
