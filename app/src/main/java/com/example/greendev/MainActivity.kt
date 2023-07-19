@@ -1,14 +1,14 @@
 package com.example.greendev
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract.Profile
+import android.view.Window
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.example.greendev.databinding.ActivityMainBinding
+import com.example.greendev.databinding.FinishDialogBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -21,7 +21,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         initNavigationBar()
+    }
+
+    override fun onBackPressed() {
+//        super.onBackPressed()
+        val dialog = FinishDialog(this)
+        dialog.initDialog()
+        return
     }
 
     private fun initNavigationBar() {
