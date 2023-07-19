@@ -1,14 +1,9 @@
 package com.example.greendev
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Window
 import androidx.fragment.app.Fragment
 import com.example.greendev.databinding.ActivityMainBinding
-import com.example.greendev.databinding.FinishDialogBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
