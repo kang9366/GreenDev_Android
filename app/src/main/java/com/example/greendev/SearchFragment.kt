@@ -1,21 +1,26 @@
 package com.example.greendev
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.example.greendev.databinding.FragmentSearchBinding
 import java.util.Locale
+
 
 class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
     private lateinit var adapter: RecyclerViewAdapter
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSearchBinding.bind(view)
@@ -66,12 +71,17 @@ class SearchFragment : Fragment() {
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
                 transaction?.apply {
                     replace(R.id.frameLayout, ApplyFragment())
+                    addToBackStack(null)
                     commit()
                 }
             }
         })
 
         binding.recyclerView.adapter = adapter
+        binding.layout.setOnTouchListener(OnTouchListener { _, _ ->
+            hideKeyboard()
+            false
+        })
     }
 
     override fun onCreateView(
@@ -79,5 +89,15 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_search, container, false)
+    }
+
+    private fun hideKeyboard() {
+        if (activity != null && requireActivity().currentFocus != null) {
+            val inputManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(
+                requireActivity().currentFocus!!.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
     }
 }
