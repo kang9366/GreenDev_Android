@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.example.greendev.adapter.BadgeData
 import com.example.greendev.adapter.BadgeRecyclerViewAdapter
 import com.example.greendev.adapter.ItemTouchCallback
 import com.example.greendev.R
 import com.example.greendev.databinding.FragmentProfileBinding
+import com.example.greendev.model.BadgeData
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
