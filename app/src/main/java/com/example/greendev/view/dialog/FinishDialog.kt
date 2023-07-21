@@ -1,4 +1,4 @@
-package com.example.greendev
+package com.example.greendev.view.dialog
 
 import android.app.Dialog
 import android.graphics.Color
