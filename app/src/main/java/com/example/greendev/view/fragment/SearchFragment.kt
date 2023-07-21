@@ -1,4 +1,4 @@
-package com.example.greendev
+package com.example.greendev.view.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,17 +8,18 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import com.example.greendev.adapter.CampaignData
+import com.example.greendev.R
+import com.example.greendev.adapter.CampaignRecyclerViewAdapter
 import com.example.greendev.databinding.FragmentSearchBinding
 import java.util.Locale
 
-
 class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
-    private lateinit var adapter: RecyclerViewAdapter
+    private lateinit var adapter: CampaignRecyclerViewAdapter
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,7 +37,7 @@ class SearchFragment : Fragment() {
         item.add(CampaignData("다다익선 캠페인", "스타벅스"))
         item.add(CampaignData("다다익선 캠페인", "스타벅스"))
 
-        adapter = RecyclerViewAdapter(item, R.layout.campaign_item_layout)
+        adapter = CampaignRecyclerViewAdapter(item, R.layout.campaign_item_layout)
 
         binding.searchView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -65,7 +66,7 @@ class SearchFragment : Fragment() {
         })
 
 
-        adapter.setOnItemClickListener(object : RecyclerViewAdapter.OnItemClickListener {
+        adapter.setOnItemClickListener(object : CampaignRecyclerViewAdapter.OnItemClickListener {
             @SuppressLint("ResourceType")
             override fun onItemClick(v: View, data: CampaignData, pos: Int) {
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
@@ -78,10 +79,10 @@ class SearchFragment : Fragment() {
         })
 
         binding.recyclerView.adapter = adapter
-        binding.layout.setOnTouchListener(OnTouchListener { _, _ ->
+        binding.layout.setOnTouchListener { _, _ ->
             hideKeyboard()
             false
-        })
+        }
     }
 
     override fun onCreateView(
