@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.greendev.R
-import com.example.greendev.adapter.RecordData
 import com.example.greendev.adapter.RecordRecyclerViewAdapter
 import com.example.greendev.databinding.FragmentRecordBinding
+import com.example.greendev.model.RecordData
 
 class RecordFragment : Fragment() {
     private lateinit var binding: FragmentRecordBinding
