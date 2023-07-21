@@ -11,10 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import com.example.greendev.adapter.CampaignData
 import com.example.greendev.R
 import com.example.greendev.adapter.CampaignRecyclerViewAdapter
+import com.example.greendev.adapter.OnItemClickListener
 import com.example.greendev.databinding.FragmentSearchBinding
+import com.example.greendev.model.CampaignData
 import java.util.Locale
 
 class SearchFragment : Fragment() {
@@ -66,7 +67,7 @@ class SearchFragment : Fragment() {
         })
 
 
-        adapter.setOnItemClickListener(object : CampaignRecyclerViewAdapter.OnItemClickListener {
+        adapter.setOnItemClickListener(object : OnItemClickListener {
             @SuppressLint("ResourceType")
             override fun onItemClick(v: View, data: CampaignData, pos: Int) {
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
