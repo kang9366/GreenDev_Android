@@ -1,9 +1,15 @@
-package com.example.greendev
+package com.example.greendev.view.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.greendev.view.dialog.FinishDialog
+import com.example.greendev.R
 import com.example.greendev.databinding.ActivityMainBinding
+import com.example.greendev.view.fragment.CampaignFragment
+import com.example.greendev.view.fragment.MainFragment
+import com.example.greendev.view.fragment.ProfileFragment
+import com.example.greendev.view.fragment.SearchFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
