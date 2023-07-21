@@ -6,12 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.greendev.adapter.CampaignData
 import com.example.greendev.R
-import com.example.greendev.adapter.RecordData
 import com.example.greendev.adapter.RecordRecyclerViewAdapter
 import com.example.greendev.adapter.CampaignRecyclerViewAdapter
+import com.example.greendev.adapter.OnItemClickListener
 import com.example.greendev.databinding.FragmentMainBinding
+import com.example.greendev.model.CampaignData
+import com.example.greendev.model.RecordData
 
 class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,7 +43,7 @@ class MainFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recordRecyclerView.adapter = recordAdapter
 
-        adapter.setOnItemClickListener(object : CampaignRecyclerViewAdapter.OnItemClickListener {
+        adapter.setOnItemClickListener(object : OnItemClickListener {
             @SuppressLint("ResourceType")
             override fun onItemClick(v: View, data: CampaignData, pos: Int) {
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
