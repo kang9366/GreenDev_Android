@@ -1,11 +1,13 @@
-package com.example.greendev
+package com.example.greendev.view.fragment
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.example.greendev.R
+import com.example.greendev.adapter.RecordData
+import com.example.greendev.adapter.RecordRecyclerViewAdapter
 import com.example.greendev.databinding.FragmentRecordBinding
 
 class RecordFragment : Fragment() {
@@ -15,14 +17,14 @@ class RecordFragment : Fragment() {
         binding = FragmentRecordBinding.bind(view)
 
         val item = ArrayList<RecordData>()
-        item.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
-        item.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
-        item.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
-        item.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
-        item.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
-        item.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
-        item.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
-        item.add(RecordData("2023-07-15", "다다익선 캠페인","스타벅스"))
+        item.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
+        item.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
+        item.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
+        item.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
+        item.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
+        item.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
+        item.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
+        item.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
 
         val adapter = RecordRecyclerViewAdapter(item)
         binding.recyclerView.adapter = adapter
