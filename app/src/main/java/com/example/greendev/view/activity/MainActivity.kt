@@ -26,13 +26,6 @@ class MainActivity : AppCompatActivity() {
         initNavigationBar()
     }
 
-    override fun onBackPressed() {
-//        super.onBackPressed()
-        val dialog = FinishDialog(this)
-        dialog.initDialog()
-        return
-    }
-
     private fun initNavigationBar() {
         binding.bottomNavigationView.run {
             setOnNavigationItemSelectedListener {
