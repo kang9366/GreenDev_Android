@@ -3,8 +3,6 @@ package com.example.greendev.view.fragment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 import com.example.greendev.BindingFragment
 import com.example.greendev.R
 import com.example.greendev.adapter.RecordRecyclerViewAdapter
@@ -13,7 +11,6 @@ import com.example.greendev.adapter.OnItemClickListener
 import com.example.greendev.databinding.FragmentHomeBinding
 import com.example.greendev.model.CampaignData
 import com.example.greendev.model.RecordData
-import com.example.greendev.view.dialog.FinishDialog
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home, true) {
     private lateinit var campaignAdapter: CampaignRecyclerViewAdapter
@@ -25,10 +22,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         initCampaignAdapter()
         initRecordAdapter()
         initItemTouchListener(campaignAdapter)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 
     private fun initItemTouchListener(adapter: CampaignRecyclerViewAdapter){
