@@ -6,66 +6,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.example.greendev.BindingFragment
 import com.example.greendev.adapter.BadgeRecyclerViewAdapter
 import com.example.greendev.adapter.ItemTouchCallback
 import com.example.greendev.R
 import com.example.greendev.databinding.FragmentProfileBinding
 import com.example.greendev.model.BadgeData
 
-class ProfileFragment : Fragment() {
-    private lateinit var binding: FragmentProfileBinding
-
+class ProfileFragment : BindingFragment<FragmentProfileBinding>(R.layout.fragment_profile, true) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentProfileBinding.bind(view)
 
         val item = ArrayList<BadgeData>()
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-        item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
 
+        for(i in 0..20) item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
+
+        initRecyclerView(item)
+    }
+
+    private fun initRecyclerView(item: ArrayList<BadgeData>){
         val adapter = BadgeRecyclerViewAdapter(item)
-        binding.badgeItemRecyclerView.adapter = adapter
+        binding?.badgeItemRecyclerView?.adapter = adapter
 
         val itemTouchHelper = ItemTouchHelper(ItemTouchCallback(adapter))
-        itemTouchHelper.attachToRecyclerView(binding.badgeItemRecyclerView)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        itemTouchHelper.attachToRecyclerView(binding?.badgeItemRecyclerView)
     }
 }
