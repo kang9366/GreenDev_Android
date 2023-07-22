@@ -12,20 +12,20 @@ import com.example.greendev.R
 import com.example.greendev.adapter.RecordRecyclerViewAdapter
 import com.example.greendev.adapter.CampaignRecyclerViewAdapter
 import com.example.greendev.adapter.OnItemClickListener
-import com.example.greendev.databinding.FragmentMainBinding
+import com.example.greendev.databinding.FragmentHomeBinding
 import com.example.greendev.model.CampaignData
 import com.example.greendev.model.RecordData
 import com.example.greendev.view.dialog.FinishDialog
 
 class HomeFragment : Fragment() {
-    private lateinit var binding: FragmentMainBinding
+    private lateinit var binding: FragmentHomeBinding
     private lateinit var campaignAdapter: CampaignRecyclerViewAdapter
     private lateinit var recordAdapter: RecordRecyclerViewAdapter
     var onBackPressedCallback: OnBackPressedCallback? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentMainBinding.bind(view)
+        binding = FragmentHomeBinding.bind(view)
 
         initCampaignAdapter()
         initRecordAdapter()
