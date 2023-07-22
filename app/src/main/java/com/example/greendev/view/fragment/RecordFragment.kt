@@ -27,7 +27,7 @@ class RecordFragment : Fragment() {
         item.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
 
         val adapter = RecordRecyclerViewAdapter(item)
-        binding.recyclerView.adapter = adapter
+        binding.campaignRecyclerView.adapter = adapter
         binding.backButton.setOnClickListener {
             activity?.supportFragmentManager
                 ?.beginTransaction()
