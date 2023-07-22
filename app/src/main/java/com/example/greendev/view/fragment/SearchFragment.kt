@@ -79,7 +79,7 @@ class SearchFragment : Fragment() {
             }
         })
 
-        binding.recyclerView.adapter = adapter
+        binding.campaignRecyclerView.adapter = adapter
         binding.layout.setOnTouchListener { _, _ ->
             hideKeyboard()
             false
