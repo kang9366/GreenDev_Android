@@ -40,25 +40,14 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     private fun initCampaignAdapter(){
         val campaignItem = ArrayList<CampaignData>()
-        campaignItem.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        campaignItem.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        campaignItem.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        campaignItem.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        campaignItem.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        campaignItem.add(CampaignData("다다익선 캠페인", "스타벅스"))
+        for(i in 0..5) campaignItem.add(CampaignData("다다익선 캠페인", "스타벅스"))
         campaignAdapter = CampaignRecyclerViewAdapter(campaignItem, R.layout.main_campaign_item_layout)
         binding?.campaignRecyclerView?.adapter = campaignAdapter
     }
 
     private fun initRecordAdapter(){
         val recordItem = ArrayList<RecordData>()
-        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
-        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
-        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
-        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
-        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
-        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
-        recordItem.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
+        for(i in 0..5) recordItem.add(RecordData("2023-07-15", "다다익선 캠페인", "스타벅스"))
         recordAdapter = RecordRecyclerViewAdapter(recordItem)
         binding?.recordRecyclerView?.adapter = recordAdapter
     }
