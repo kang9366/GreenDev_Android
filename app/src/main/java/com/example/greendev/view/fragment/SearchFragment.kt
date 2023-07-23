@@ -6,40 +6,26 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.Fragment
-import com.example.greendev.adapter.CampaignData
+import com.example.greendev.BindingFragment
 import com.example.greendev.R
 import com.example.greendev.adapter.CampaignRecyclerViewAdapter
+import com.example.greendev.adapter.OnItemClickListener
 import com.example.greendev.databinding.FragmentSearchBinding
+import com.example.greendev.model.CampaignData
 import java.util.Locale
 
-class SearchFragment : Fragment() {
-    private lateinit var binding: FragmentSearchBinding
+class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_search, true) {
     private lateinit var adapter: CampaignRecyclerViewAdapter
+    private lateinit var item: ArrayList<CampaignData>
+    private lateinit var searchItem: ArrayList<CampaignData>
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentSearchBinding.bind(view)
 
-        val item = ArrayList<CampaignData>()
-        val search_item = ArrayList<CampaignData>()
-
-        //recycerview test
-        item.add(CampaignData("데보션 캠페인", "SK"))
-        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
-
-        adapter = CampaignRecyclerViewAdapter(item, R.layout.campaign_item_layout)
-
-        binding.searchView.addTextChangedListener(object : TextWatcher {
+        binding?.searchView?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 Log.d("test", "before")
             }
@@ -49,24 +35,23 @@ class SearchFragment : Fragment() {
 
             override fun afterTextChanged(p0: Editable?) {
                 Log.d("test", "after")
-                val searchText: String = binding.searchView.text.toString()
-                search_item.clear()
+                val searchText: String = binding!!.searchView.text.toString()
+                searchItem.clear()
                 if(searchText == "") {
                     adapter.setItem(item)
                 }else {
                     for(i in 0 until item.size) {
                         if (item[i].name.toLowerCase().contains(searchText.lowercase(Locale.getDefault()))
                             || item[i].company.toLowerCase().contains(searchText.lowercase(Locale.getDefault()))) {
-                            search_item.add(item[i])
+                            searchItem.add(item[i])
                         }
-                        adapter.setItem(search_item)
+                        adapter.setItem(searchItem)
                     }
                 }
             }
         })
 
-
-        adapter.setOnItemClickListener(object : CampaignRecyclerViewAdapter.OnItemClickListener {
+        adapter.setOnItemClickListener(object : OnItemClickListener {
             @SuppressLint("ResourceType")
             override fun onItemClick(v: View, data: CampaignData, pos: Int) {
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
@@ -78,18 +63,24 @@ class SearchFragment : Fragment() {
             }
         })
 
-        binding.recyclerView.adapter = adapter
-        binding.layout.setOnTouchListener { _, _ ->
+        binding?.layout?.setOnTouchListener { _, _ ->
             hideKeyboard()
             false
         }
+
+        initRecyclerView()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_search, container, false)
+    private fun initRecyclerView(){
+        //recycerview test
+        item.add(CampaignData("데보션 캠페인", "SK"))
+        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
+        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
+        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
+        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
+        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
+        adapter = CampaignRecyclerViewAdapter(item, R.layout.campaign_item_layout)
+        binding?.campaignRecyclerView?.adapter = adapter
     }
 
     private fun hideKeyboard() {
