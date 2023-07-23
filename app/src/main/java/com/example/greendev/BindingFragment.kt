@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +15,7 @@ import com.example.greendev.view.dialog.FinishDialog
 
 abstract class BindingFragment<T : ViewDataBinding>(
     @LayoutRes val layoutRes: Int,
-    val isConnectedBnv: Boolean
+    private val isConnectedBnv: Boolean,
 ) : Fragment() {
     private var _binding: T? = null
     protected val binding get() = _binding
@@ -55,5 +56,15 @@ abstract class BindingFragment<T : ViewDataBinding>(
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             onBackPressedCallback as OnBackPressedCallback
         )
+    }
+
+    fun returnToPreviousFragment(button: Button){
+        button.setOnClickListener {
+            activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.remove(this)
+                ?.commit()
+            activity?.supportFragmentManager?.popBackStack()
+        }
     }
 }
