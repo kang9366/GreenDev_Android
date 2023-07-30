@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -51,4 +52,45 @@
         android:layout_marginTop="74dp"
         android:src="@drawable/logo"/>
 
+    <Button
+        android:id="@+id/googleLoginButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo_image"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/round_background"
+        android:elevation="20dp"
+        android:text="Login With GitHub"
+        android:textColor="@color/white"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/black"
+        android:drawableLeft="@drawable/github"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"/>
+
+    <Button
+        android:id="@+id/githubLoginButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/googleLoginButton"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/round_background"
+        android:elevation="20dp"
+        android:text="Login With Google"
+        android:textColor="@color/black"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/white"
+        android:drawableLeft="@drawable/google"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
