@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.example.greendev.BindingFragment
@@ -21,36 +20,26 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     private lateinit var item: ArrayList<CampaignData>
     private lateinit var searchItem: ArrayList<CampaignData>
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        hideKeyboard()
+        initRecyclerView()
+        initApplyFragment()
+        initItemFilter()
+    }
 
-        binding?.searchView?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.d("test", "before")
-            }
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.d("test", "on")
-            }
+    private fun initRecyclerView(){
+        item = ArrayList()
+        //recycerview test
+        item.add(CampaignData("데보션 캠페인", "SK"))
+        for(i in 0 .. 5){
+            item.add(CampaignData("다다익선 캠페인", "스타벅스"))
+        }
+        adapter = CampaignRecyclerViewAdapter(item, R.layout.campaign_item_layout)
+        binding?.campaignRecyclerView?.adapter = adapter
+    }
 
-            override fun afterTextChanged(p0: Editable?) {
-                Log.d("test", "after")
-                val searchText: String = binding!!.searchView.text.toString()
-                searchItem.clear()
-                if(searchText == "") {
-                    adapter.setItem(item)
-                }else {
-                    for(i in 0 until item.size) {
-                        if (item[i].name.toLowerCase().contains(searchText.lowercase(Locale.getDefault()))
-                            || item[i].company.toLowerCase().contains(searchText.lowercase(Locale.getDefault()))) {
-                            searchItem.add(item[i])
-                        }
-                        adapter.setItem(searchItem)
-                    }
-                }
-            }
-        })
-
+    private fun initApplyFragment(){
         adapter.setOnItemClickListener(object : OnItemClickListener {
             @SuppressLint("ResourceType")
             override fun onItemClick(v: View, data: CampaignData, pos: Int) {
@@ -62,34 +51,42 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                 }
             }
         })
-
-        binding?.layout?.setOnTouchListener { _, _ ->
-            hideKeyboard()
-            false
-        }
-
-        initRecyclerView()
     }
 
-    private fun initRecyclerView(){
-        //recycerview test
-        item.add(CampaignData("데보션 캠페인", "SK"))
-        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        item.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        adapter = CampaignRecyclerViewAdapter(item, R.layout.campaign_item_layout)
-        binding?.campaignRecyclerView?.adapter = adapter
+    private fun initItemFilter(){
+        searchItem = ArrayList()
+        binding?.searchView?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {
+                val searchText: String = binding!!.searchView.text.toString()
+                searchItem.clear()
+                if(searchText == "") {
+                    adapter.setItem(item)
+                }else {
+                    for(i in 0 until item.size) {
+                        if (item[i].name.lowercase(Locale.ROOT).contains(searchText.lowercase(Locale.getDefault()))
+                            || item[i].company.lowercase(Locale.ROOT).contains(searchText.lowercase(Locale.getDefault()))) {
+                            searchItem.add(item[i])
+                        }
+                        adapter.setItem(searchItem)
+                    }
+                }
+            }
+        })
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun hideKeyboard() {
-        if (activity != null && requireActivity().currentFocus != null) {
-            val inputManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputManager.hideSoftInputFromWindow(
-                requireActivity().currentFocus!!.windowToken,
-                InputMethodManager.HIDE_NOT_ALWAYS
-            )
+        binding?.layout?.setOnTouchListener {_, _ ->
+            if (activity != null && requireActivity().currentFocus != null) {
+                val inputManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.hideSoftInputFromWindow(
+                    requireActivity().currentFocus!!.windowToken,
+                    InputMethodManager.HIDE_NOT_ALWAYS
+                )
+            }
+            false
         }
     }
 }
