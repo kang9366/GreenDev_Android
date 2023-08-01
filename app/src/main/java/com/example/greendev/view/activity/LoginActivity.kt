@@ -1,8 +1,8 @@
 package com.example.greendev.view.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 import com.example.greendev.BindingActivity
 import com.example.greendev.R
 import com.example.greendev.databinding.ActivityLoginBinding
@@ -20,5 +20,15 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         this.onBackPressedDispatcher.addCallback(this, callback)
+        binding.googleLoginButton.setOnClickListener {
+            initMainActivity()
+        }
+    }
+
+    private fun initMainActivity() {
+        Intent(this@LoginActivity, MainActivity::class.java).apply {
+            startActivity(this)
+        }
+        finish()
     }
 }
