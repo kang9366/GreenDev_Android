@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragment.ApplyFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/ic_back"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="31dp"/>
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/back_button"
+            app:layout_constraintTop_toTopOf="@id/back_button"
+            app:layout_constraintBottom_toBottomOf="@id/back_button"
+            android:text="참여 인증글 쓰기"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:layout_marginStart="10dp"/>
+
+        <Button
+            android:id="@+id/post_button"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_text"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:paddingTop="3dp"
+            android:background="@drawable/round_background"
+            android:text="등록"
+            android:textSize="16sp"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:textColor="@color/white"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_button"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="30dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="25dp"
+                    app:cardBackgroundColor="#EBF4EE"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/circle_background"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="4dp"
+                    android:hint="제목"
+                    android:fontFamily="@font/gmarketsansttfmedium"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:id="@+id/date_picker_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/circle_background"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="20dp"
+                    android:text="날짜 선택"
+                    android:gravity="start|center_vertical"
+                    android:fontFamily="@font/gmarketsansttfmedium"
+                    android:textSize="15sp"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/gmarketsansttfmedium"
+                    android:hint="내용을 입력하세요"
+                    android:gravity="top|left"
+                    android:padding="10dp"/>
+            </LinearLayout>
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/addPhotoButton"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/circle_background"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:text="사진 첨부"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/background"
+            android:textSize="15sp"
+            android:drawableEnd="@drawable/add"
+            android:paddingEnd="10dp"/>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="150dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addPhotoButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/sample"
+            android:background="@drawable/image_background"
+            android:padding="1dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
