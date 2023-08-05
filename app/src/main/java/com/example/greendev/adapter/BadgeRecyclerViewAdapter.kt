@@ -18,6 +18,12 @@ class BadgeRecyclerViewAdapter(private val items: ArrayList<BadgeData>): Recycle
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         holder.badge.setImageDrawable(item.badge)
+
+        holder.itemView.setOnLongClickListener {
+            val clipData = View.DragShadowBuilder(it)
+            it.startDragAndDrop(null, clipData, it, 0)
+            true
+        }
     }
 
     override fun getItemCount(): Int {
