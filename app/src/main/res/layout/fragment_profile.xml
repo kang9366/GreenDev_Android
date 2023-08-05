@@ -34,15 +34,19 @@
             android:fontFamily="@font/gmarketsansttfmedium"
             android:background="@drawable/round_background"/>
 
-        <ImageView
+        <FrameLayout
             android:id="@+id/profile_tree"
             android:layout_width="220dp"
             android:layout_height="373dp"
-            android:src="@drawable/ic_tree"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title_text"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_tree" />
+        </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/badgeItemRecyclerView"
