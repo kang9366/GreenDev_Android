@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.OnBackPressedCallback
+import com.example.greendev.App.Companion.preferences
 import com.example.greendev.R
 
 @SuppressLint("CustomSplashScreen")
@@ -28,10 +29,17 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun initLoginActivity() {
-        Intent(this@SplashActivity, LoginActivity::class.java).apply {
-            startActivity(this)
+        if(preferences.isLogin){
+            Intent(this@SplashActivity, MainActivity::class.java).apply {
+                startActivity(this)
+            }
+            finish()
+        }else{
+            Intent(this@SplashActivity, LoginActivity::class.java).apply {
+                startActivity(this)
+            }
+            finish()
         }
-        finish()
     }
 
     companion object {
