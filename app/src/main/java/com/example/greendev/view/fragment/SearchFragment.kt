@@ -5,38 +5,34 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.example.greendev.App
 import com.example.greendev.BindingFragment
 import com.example.greendev.R
+import com.example.greendev.RetrofitBuilder
 import com.example.greendev.adapter.CampaignRecyclerViewAdapter
 import com.example.greendev.adapter.OnItemClickListener
 import com.example.greendev.databinding.FragmentSearchBinding
+import com.example.greendev.model.AllCampaignResponse
 import com.example.greendev.model.CampaignData
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Locale
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_search, true) {
     private lateinit var adapter: CampaignRecyclerViewAdapter
-    private lateinit var item: ArrayList<CampaignData>
+    private lateinit var campaignItem: ArrayList<CampaignData>
     private lateinit var searchItem: ArrayList<CampaignData>
+    private val retrofitBuilder = RetrofitBuilder.retrofitService
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         hideKeyboard()
-        initRecyclerView()
-        initApplyFragment()
         initItemFilter()
-    }
-
-    private fun initRecyclerView(){
-        item = ArrayList()
-        //recycerview test
-        item.add(CampaignData("데보션 캠페인", "SK"))
-        for(i in 0 .. 5){
-            item.add(CampaignData("다다익선 캠페인", "스타벅스"))
-        }
-        adapter = CampaignRecyclerViewAdapter(item, R.layout.campaign_item_layout)
-        binding?.campaignRecyclerView?.adapter = adapter
+        initAllCampaign()
     }
 
     private fun initApplyFragment(){
@@ -45,7 +41,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
             override fun onItemClick(v: View, data: CampaignData, pos: Int) {
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
                 transaction?.apply {
-                    replace(R.id.frameLayout, ApplyFragment())
+                    replace(R.id.frameLayout, ApplyFragment(data.id))
                     addToBackStack(null)
                     commit()
                 }
@@ -62,12 +58,12 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                 val searchText: String = binding!!.searchView.text.toString()
                 searchItem.clear()
                 if(searchText == "") {
-                    adapter.setItem(item)
+                    adapter.setItem(campaignItem)
                 }else {
-                    for(i in 0 until item.size) {
-                        if (item[i].name.lowercase(Locale.ROOT).contains(searchText.lowercase(Locale.getDefault()))
-                            || item[i].company.lowercase(Locale.ROOT).contains(searchText.lowercase(Locale.getDefault()))) {
-                            searchItem.add(item[i])
+                    for(i in 0 until campaignItem.size) {
+                        if (campaignItem[i].name.lowercase(Locale.ROOT).contains(searchText.lowercase(Locale.getDefault()))
+                            || campaignItem[i].writer.lowercase(Locale.ROOT).contains(searchText.lowercase(Locale.getDefault()))) {
+                            searchItem.add(campaignItem[i])
                         }
                         adapter.setItem(searchItem)
                     }
@@ -88,5 +84,41 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
             }
             false
         }
+    }
+
+    private fun initAllCampaign(){
+        val getAllPosts: Call<AllCampaignResponse> = retrofitBuilder.getAllCampaign("Bearer ${App.preferences.token!!}")
+
+        getAllPosts.enqueue(object : Callback<AllCampaignResponse> {
+            override fun onResponse(call: Call<AllCampaignResponse>, response: Response<AllCampaignResponse>) {
+                if(response.isSuccessful){
+                    val data = response.body()!!.data
+                    if(data.count==0){
+                        binding?.emptyText?.visibility = View.VISIBLE
+                    }else{
+                        campaignItem = ArrayList()
+                        for(i in 0 until data.count){
+                            campaignItem.add(CampaignData(
+                                data.campaigns[i].title,
+                                data.campaigns[i].writer,
+                                data.campaigns[i].campaignImageUrl,
+                                data.campaigns[i].date,
+                                data.campaigns[i].campaignId
+                            ))
+                        }
+                        adapter = CampaignRecyclerViewAdapter(campaignItem, R.layout.campaign_item_layout)
+                        binding?.campaignRecyclerView?.adapter = adapter
+                        initApplyFragment()
+                    }
+                    Log.d("testtt", data.campaigns[0].toString())
+                }else{
+                    Log.d("testtt", "Fail : " + response.errorBody()!!.string())
+                }
+            }
+
+            override fun onFailure(call: Call<AllCampaignResponse>, t: Throwable) {
+                Log.d("NetWorkError", "${t.message}")
+            }
+        })
     }
 }

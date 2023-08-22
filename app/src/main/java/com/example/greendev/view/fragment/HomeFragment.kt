@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.core.view.marginBottom
 import com.example.greendev.App.Companion.preferences
 import com.example.greendev.BindingFragment
 import com.example.greendev.R
@@ -64,7 +63,10 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
                         for(i in 0 until data.count){
                             campaignItem.add(CampaignData(
                                 data.campaigns[i].title,
-                                data.campaigns[i].description))
+                                data.campaigns[i].description,
+                                data.campaigns[i].campaignImageUrl,
+                                data.campaigns[i].date,
+                                data.campaigns[i].campaignId))
                         }
                         campaignAdapter = CampaignRecyclerViewAdapter(campaignItem, R.layout.main_campaign_item_layout)
                         binding?.campaignRecyclerView?.adapter = campaignAdapter
