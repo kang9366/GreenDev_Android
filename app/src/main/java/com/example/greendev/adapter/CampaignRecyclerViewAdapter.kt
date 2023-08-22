@@ -1,6 +1,7 @@
 package com.example.greendev.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,10 +37,12 @@ class CampaignRecyclerViewAdapter(private var items: ArrayList<CampaignData>, pr
         val writer: TextView = view.findViewById(R.id.writer)
         val duration: TextView = view.findViewById(R.id.duration)
         val image: ImageView = view.findViewById(R.id.campaign_image)
+        var id: Int = 0
         fun bind(item: CampaignData) {
             name.text = item.name
             writer.text = item.writer
             duration.text = item.duration
+            id = item.id
             Glide.with(view)
                 .load(item.imageUrl)
                 .into(image)
