@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.greendev.R
 import com.example.greendev.model.CampaignData
 
@@ -31,11 +33,16 @@ class CampaignRecyclerViewAdapter(private var items: ArrayList<CampaignData>, pr
     inner class ViewHolder(v: View): RecyclerView.ViewHolder(v){
         private var view: View = v
         val name: TextView = view.findViewById(R.id.name)
-        val company: TextView = view.findViewById(R.id.company)
-
+        val writer: TextView = view.findViewById(R.id.writer)
+        val duration: TextView = view.findViewById(R.id.duration)
+        val image: ImageView = view.findViewById(R.id.campaign_image)
         fun bind(item: CampaignData) {
             name.text = item.name
-            company.text = item.company
+            writer.text = item.writer
+            duration.text = item.duration
+            Glide.with(view)
+                .load(item.imageUrl)
+                .into(image)
             val pos = adapterPosition
             if(pos!= RecyclerView.NO_POSITION) {
                 itemView.setOnClickListener {
