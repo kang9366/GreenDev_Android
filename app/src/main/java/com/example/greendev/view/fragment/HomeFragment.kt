@@ -64,7 +64,9 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
                         for(i in 0 until data.count){
                             campaignItem.add(CampaignData(
                                 data.campaigns[i].title,
-                                data.campaigns[i].description))
+                                data.campaigns[i].description,
+                                data.campaigns[i].campaignImageUrl,
+                                data.campaigns[i].date))
                         }
                         campaignAdapter = CampaignRecyclerViewAdapter(campaignItem, R.layout.main_campaign_item_layout)
                         binding?.campaignRecyclerView?.adapter = campaignAdapter
