@@ -9,15 +9,15 @@
         android:id="@+id/tab_campaign"
         android:enabled="true"
         android:icon="@drawable/ic_campaign"
-        android:title="홈"/>
+        android:title="캠페인 등록"/>
     <item
         android:id="@+id/tab_search"
         android:enabled="true"
         android:icon="@drawable/ic_search"
-        android:title="홈"/>
+        android:title="검색"/>
     <item
         android:id="@+id/tab_profile"
         android:enabled="true"
         android:icon="@drawable/ic_profile"
-        android:title="홈"/>
+        android:title="프로필"/>
 </menu>
