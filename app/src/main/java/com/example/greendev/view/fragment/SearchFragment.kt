@@ -41,7 +41,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
             override fun onItemClick(v: View, data: CampaignData, pos: Int) {
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
                 transaction?.apply {
-                    replace(R.id.frameLayout, ApplyFragment())
+                    replace(R.id.frameLayout, ApplyFragment(data.id))
                     addToBackStack(null)
                     commit()
                 }
@@ -102,7 +102,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                                 data.campaigns[i].title,
                                 data.campaigns[i].writer,
                                 data.campaigns[i].campaignImageUrl,
-                                data.campaigns[i].date
+                                data.campaigns[i].date,
+                                data.campaigns[i].campaignId
                             ))
                         }
                         adapter = CampaignRecyclerViewAdapter(campaignItem, R.layout.campaign_item_layout)
