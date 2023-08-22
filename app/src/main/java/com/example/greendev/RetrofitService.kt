@@ -2,11 +2,13 @@ package com.example.greendev
 
 import com.example.greendev.model.AllCampaignResponse
 import com.example.greendev.model.ApiResponse
+import com.example.greendev.model.DetailCampaignResponse
 import com.example.greendev.model.GrassResponse
 import com.example.greendev.model.PostResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Path
 
 interface RetrofitService {
     @GET("api/v1/members/campaigns")
@@ -20,4 +22,7 @@ interface RetrofitService {
 
     @GET("api/v1/campaigns?page=0&size=3&sort=joinCount,DESC")
     fun getAllCampaign(@Header("Authorization") token: String): Call<AllCampaignResponse>
+
+    @GET("api/v1/campaigns/{campaignId}")
+    fun getDetailCampaign(@Path("campaignId") campaignId: Int, @Header("Authorization") token: String): Call<DetailCampaignResponse>
 }
