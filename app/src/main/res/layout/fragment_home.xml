@@ -55,6 +55,20 @@
                     android:fontFamily="@font/gmarketsansttfmedium"
                     android:textColor="@color/black"/>
 
+                <TextView
+                    android:id="@+id/emptyCampaign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="참여중인 캠페인이 없습니다."
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/campaign"
+                    android:layout_marginTop="30dp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/gmarketsansttfmedium"
+                    android:textSize="15sp"/>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/campaignRecyclerView"
                     android:orientation="horizontal"
@@ -65,6 +79,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="30dp"
                     android:layout_marginTop="10dp"
                     tools:listitem="@layout/main_campaign_item_layout"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
@@ -73,7 +88,7 @@
                     android:id="@+id/record_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/campaignRecyclerView"
+                    app:layout_constraintTop_toBottomOf="@id/emptyCampaign"
                     app:layout_constraintStart_toStartOf="@+id/campaign"
                     android:layout_marginTop="30dp"
                     android:text="최근 30일 기록"
@@ -260,15 +275,41 @@
                         android:background="@drawable/grid_record_item"/>
                 </GridLayout>
 
+                <TextView
+                    android:id="@+id/mypost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/grid_record"
+                    app:layout_constraintStart_toStartOf="@+id/campaign"
+                    android:layout_marginTop="30dp"
+                    android:text="작성 글"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/gmarketsansttfmedium"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/emptyPost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="작성한 글이 없습니다."
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/mypost"
+                    android:layout_marginTop="30dp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/gmarketsansttfmedium"
+                    android:textSize="15sp"/>
+
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/record_recycler_view"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
                     android:layout_marginBottom="58dp"
                     app:layout_constraintStart_toStartOf="@id/campaignRecyclerView"
                     app:layout_constraintEnd_toEndOf="@id/campaignRecyclerView"
-                    app:layout_constraintTop_toBottomOf="@id/grid_record"
+                    app:layout_constraintTop_toBottomOf="@id/mypost"
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:listitem="@layout/record_item_layout"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
