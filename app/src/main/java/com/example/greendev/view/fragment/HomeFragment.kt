@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.marginBottom
 import com.example.greendev.App.Companion.preferences
 import com.example.greendev.BindingFragment
 import com.example.greendev.R
@@ -58,8 +59,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
                     val data = response.body()!!.data
                     Log.d("testtt", data.count.toString())
                     if(data.count==0){
-//                        binding?.emptyText?.visibility = View.VISIBLE
-//                        binding?.campaignRecyclerView?.visibility = View.GONE
+                        binding?.emptyCampaign?.visibility = View.VISIBLE
                     }else{
                         for(i in 0 until data.count){
                             campaignItem.add(CampaignData(
@@ -88,14 +88,19 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         getPosts.enqueue(object : Callback<PostResponse> {
             override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
                 if(response.isSuccessful){
-                    for(i in 0 until response.body()?.data?.count!!){
-                        postItem.add(RecordData(
-                            response.body()!!.data.posts[i].date,
-                            response.body()!!.data.posts[i].content,
-                            response.body()!!.data.posts[i].nickname))
+                    val data = response.body()!!.data
+                    if(data.count==0){
+                        binding?.emptyPost?.visibility = View.VISIBLE
+                    }else{
+                        for(i in 0 until response.body()?.data?.count!!){
+                            postItem.add(RecordData(
+                                response.body()!!.data.posts[i].date,
+                                response.body()!!.data.posts[i].content,
+                                response.body()!!.data.posts[i].nickname))
+                        }
+                        postAdapter = RecordRecyclerViewAdapter(postItem)
+                        binding?.recordRecyclerView?.adapter = postAdapter
                     }
-                    postAdapter = RecordRecyclerViewAdapter(postItem)
-                    binding?.recordRecyclerView?.adapter = postAdapter
                 }else{
                     Log.d("testtt", "Fail : " + response.errorBody()!!.string())
                 }
