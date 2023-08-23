@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.greendev.R
 import com.example.greendev.model.BadgeData
 
@@ -17,12 +18,13 @@ class BadgeRecyclerViewAdapter(private val items: ArrayList<BadgeData>): Recycle
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.badge.setImageDrawable(item.badge)
-
-        holder.itemView.setOnLongClickListener {
-            val clipData = View.DragShadowBuilder(it)
-            it.startDragAndDrop(null, clipData, it, 0)
-            true
+        holder.apply {
+            bind(item)
+            itemView.setOnLongClickListener {
+                val clipData = View.DragShadowBuilder(it)
+                it.startDragAndDrop(null, clipData, it, 0)
+                true
+            }
         }
     }
 
@@ -33,6 +35,11 @@ class BadgeRecyclerViewAdapter(private val items: ArrayList<BadgeData>): Recycle
     inner class ViewHolder(v: View): RecyclerView.ViewHolder(v){
         private var view: View = v
         val badge: ImageView = view.findViewById(R.id.badgeImage)
+        fun bind(item: BadgeData) {
+            Glide.with(view)
+                .load(item.imageUrl)
+                .into(badge)
+        }
     }
 
     override fun onItemMove(from: Int, to: Int) {
