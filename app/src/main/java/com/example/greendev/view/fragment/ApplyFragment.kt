@@ -2,7 +2,6 @@ package com.example.greendev.view.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import com.example.greendev.App
@@ -38,6 +37,7 @@ class ApplyFragment(campaignId: Int) : BindingFragment<FragmentApplyBinding>(R.l
                     val data = response.body()!!.data
                     Glide.with(requireContext())
                         .load(data.campaignImageUrl)
+                        .error(R.drawable.sample)
                         .into(binding?.campaignImage!!)
 
                     binding?.titleText?.text = data.title
@@ -50,8 +50,6 @@ class ApplyFragment(campaignId: Int) : BindingFragment<FragmentApplyBinding>(R.l
             override fun onFailure(call: Call<DetailCampaignResponse>, t: Throwable) {
                 TODO("Not yet implemented")
             }
-
         })
-
     }
 }

@@ -1,25 +1,22 @@
 package com.example.greendev.view.dialog
 
 import android.app.Dialog
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
-import com.example.greendev.R
-import com.example.greendev.databinding.FinishDialogBinding
 import com.example.greendev.databinding.PhotoDialogBinding
 
-class PhotoDialog(private val context : FragmentActivity) {
+interface CameraActionListener {
+    fun onCameraAction()
+}
+
+class PhotoDialog(private val context : FragmentActivity, private val cameraActionListener: CameraActionListener) {
     private lateinit var binding : PhotoDialogBinding
     private val dialog = Dialog(context)
 
@@ -37,6 +34,11 @@ class PhotoDialog(private val context : FragmentActivity) {
 
         binding.runGallery.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+
+        binding.runCamera.setOnClickListener {
+            cameraActionListener.onCameraAction()
+            closeDialog()
         }
 
         dialog.show()

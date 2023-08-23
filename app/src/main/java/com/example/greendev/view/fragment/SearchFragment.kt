@@ -101,7 +101,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                             campaignItem.add(CampaignData(
                                 data.campaigns[i].title,
                                 data.campaigns[i].writer,
-                                data.campaigns[i].campaignImageUrl,
+                                "https://phinf.pstatic.net/contact/20200623_268/1592901094691BqKER_JPEG/image.jpg",
                                 data.campaigns[i].date,
                                 data.campaigns[i].campaignId
                             ))
@@ -110,7 +110,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                         binding?.campaignRecyclerView?.adapter = adapter
                         initApplyFragment()
                     }
-                    Log.d("testtt", data.campaigns[0].toString())
                 }else{
                     Log.d("testtt", "Fail : " + response.errorBody()!!.string())
                 }
