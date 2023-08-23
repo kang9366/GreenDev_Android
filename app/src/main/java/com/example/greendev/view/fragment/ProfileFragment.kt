@@ -7,34 +7,57 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
+import com.example.greendev.App
 import com.example.greendev.BindingFragment
 import com.example.greendev.adapter.BadgeRecyclerViewAdapter
 import com.example.greendev.R
+import com.example.greendev.RetrofitBuilder
 import com.example.greendev.adapter.ItemTouchCallback
 import com.example.greendev.databinding.FragmentProfileBinding
 import com.example.greendev.model.BadgeData
+import com.example.greendev.model.BadgeResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ProfileFragment : BindingFragment<FragmentProfileBinding>(R.layout.fragment_profile, true) {
     val item = ArrayList<BadgeData>()
+    private val retrofitBuilder = RetrofitBuilder.retrofitService
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getBadgeData()
 
-        for(i in 0..20) item.add(BadgeData(requireActivity().getDrawable(R.drawable.badge_sample)!!))
-
-        initRecyclerView(item)
         val itemTouchHelper = ItemTouchHelper(ItemTouchCallback(item))
         itemTouchHelper.attachToRecyclerView(binding?.badgeItemRecyclerView)
         binding?.profileTree?.setOnDragListener(DragListener())
     }
 
-    private fun initRecyclerView(item: ArrayList<BadgeData>){
-        val adapter = BadgeRecyclerViewAdapter(item)
-        binding?.badgeItemRecyclerView?.adapter = adapter
+    private fun getBadgeData(){
+        val getBadgeData: Call<BadgeResponse> = retrofitBuilder.getBadgeData("Bearer ${App.preferences.token!!}")
+        getBadgeData.enqueue(object: Callback<BadgeResponse>{
+            override fun onResponse(call: Call<BadgeResponse>, response: Response<BadgeResponse>) {
+                if(response.isSuccessful){
+                    val data = response.body()!!.data
+                    if(data.count==0){
+                        binding?.emptyText?.visibility = View.VISIBLE
+                    }else{
+                        for(i in 0 until data.count){
+                            item.add(BadgeData(data.badges[i].badgeImageUrl))
+                        }
+                        val adapter = BadgeRecyclerViewAdapter(item)
+                        binding?.badgeItemRecyclerView?.adapter = adapter
+                        val itemTouchHelper = ItemTouchHelper(ItemTouchCallback(item))
+                        itemTouchHelper.attachToRecyclerView(binding?.badgeItemRecyclerView)
+                    }
+                }
+            }
 
-        val itemTouchHelper = ItemTouchHelper(ItemTouchCallback(item))
-        itemTouchHelper.attachToRecyclerView(binding?.badgeItemRecyclerView)
+            override fun onFailure(call: Call<BadgeResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
+
     }
 
     inner class DragListener : View.OnDragListener {
@@ -65,5 +88,4 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(R.layout.fragmen
             return false
         }
     }
-
 }
