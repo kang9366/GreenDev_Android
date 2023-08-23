@@ -2,6 +2,7 @@ package com.example.greendev
 
 import com.example.greendev.model.AllCampaignResponse
 import com.example.greendev.model.ApiResponse
+import com.example.greendev.model.BadgeResponse
 import com.example.greendev.model.DetailCampaignResponse
 import com.example.greendev.model.GrassResponse
 import com.example.greendev.model.PostCampaign
@@ -40,4 +41,7 @@ interface RetrofitService {
 
     @POST("api/v1/campaigns")
     fun postCampaign(@Header("Authorization") token: String, @Body campaignData: PostCampaign): Call<PostCampaignResponse>
+
+    @GET("api/v1/profile")
+    fun getBadgeData(@Header("Authorization") token: String): Call<BadgeResponse>
 }

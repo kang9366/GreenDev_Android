@@ -48,6 +48,21 @@
                 android:src="@drawable/ic_tree" />
         </FrameLayout>
 
+        <TextView
+            android:id="@+id/emptyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/badgeItemRecyclerView"
+            android:text="보유중인 뱃지가 없습니다."
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:visibility="invisible"/>
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/badgeItemRecyclerView"
             android:layout_width="0dp"
