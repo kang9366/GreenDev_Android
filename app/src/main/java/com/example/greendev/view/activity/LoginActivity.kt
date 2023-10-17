@@ -69,7 +69,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
             }
         }
 
-        val initialUrl = "https://greendev-api.dev-lr.com/oauth2/authorization/$service?redirect_uri=https://greendev.dev-lr.com"
+        val initialUrl = "https://greendev-api.dev-lr.com/oauth2/authorization/$service?redirect_uri=greendev://open.app"
         webView.loadUrl(initialUrl)
 
         webView.setOnKeyListener { _, keyCode, event ->
