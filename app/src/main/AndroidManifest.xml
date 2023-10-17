@@ -33,6 +33,14 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="greendev"
+                    android:host="open.app" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".view.activity.MainActivity"
