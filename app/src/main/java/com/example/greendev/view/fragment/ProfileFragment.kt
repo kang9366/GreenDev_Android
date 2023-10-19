@@ -22,7 +22,7 @@ import retrofit2.Response
 
 class ProfileFragment : BindingFragment<FragmentProfileBinding>(R.layout.fragment_profile, true) {
     val item = ArrayList<BadgeData>()
-    private val retrofitBuilder = RetrofitBuilder.retrofitService
+    private val retrofitBuilder = RetrofitBuilder.api
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
