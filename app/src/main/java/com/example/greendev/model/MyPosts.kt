@@ -5,6 +5,7 @@ data class Post(
     val content: String,
     val postImageUrl: String,
     val date: String,
+    val campaignTitle: String,
     val nickname: String,
     val email: String,
     val profileImageUrl: String
