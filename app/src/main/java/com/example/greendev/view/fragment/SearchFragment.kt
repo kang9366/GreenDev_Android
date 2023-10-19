@@ -1,13 +1,11 @@
 package com.example.greendev.view.fragment
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import com.example.greendev.App
 import com.example.greendev.BindingFragment
 import com.example.greendev.R
@@ -26,11 +24,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     private lateinit var adapter: CampaignRecyclerViewAdapter
     private lateinit var campaignItem: ArrayList<CampaignData>
     private lateinit var searchItem: ArrayList<CampaignData>
-    private val retrofitBuilder = RetrofitBuilder.retrofitService
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        hideKeyboard()
         initItemFilter()
         initAllCampaign()
     }
@@ -72,22 +68,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         })
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun hideKeyboard() {
-        binding?.layout?.setOnTouchListener {_, _ ->
-            if (activity != null && requireActivity().currentFocus != null) {
-                val inputManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputManager.hideSoftInputFromWindow(
-                    requireActivity().currentFocus!!.windowToken,
-                    InputMethodManager.HIDE_NOT_ALWAYS
-                )
-            }
-            false
-        }
-    }
-
     private fun initAllCampaign(){
-        val getAllPosts: Call<AllCampaignResponse> = retrofitBuilder.getAllCampaign("Bearer ${App.preferences.token!!}")
+        val getAllPosts = RetrofitBuilder.api.getAllCampaign("Bearer ${App.preferences.token!!}")
 
         getAllPosts.enqueue(object : Callback<AllCampaignResponse> {
             override fun onResponse(call: Call<AllCampaignResponse>, response: Response<AllCampaignResponse>) {
@@ -101,7 +83,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                             campaignItem.add(CampaignData(
                                 data.campaigns[i].title,
                                 data.campaigns[i].writer,
-                                "https://phinf.pstatic.net/contact/20200623_268/1592901094691BqKER_JPEG/image.jpg",
+                                data.campaigns[i].campaignImageUrl,
                                 data.campaigns[i].date,
                                 data.campaigns[i].campaignId
                             ))
