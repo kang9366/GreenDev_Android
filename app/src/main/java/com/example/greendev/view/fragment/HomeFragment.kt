@@ -3,7 +3,9 @@ package com.example.greendev.view.fragment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import com.example.greendev.App.Companion.preferences
 import com.example.greendev.BindingFragment
 import com.example.greendev.R
@@ -17,6 +19,15 @@ import com.example.greendev.model.CampaignData
 import com.example.greendev.model.GrassResponse
 import com.example.greendev.model.PostResponse
 import com.example.greendev.model.RecordData
+import com.google.gson.JsonObject
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
+import com.skydoves.balloon.createBalloon
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,14 +35,14 @@ import retrofit2.Response
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home, true) {
     private lateinit var campaignAdapter: CampaignRecyclerViewAdapter
     private lateinit var postAdapter: RecordRecyclerViewAdapter
-    private val retrofitBuilder = RetrofitBuilder.retrofitService
+    private val retrofitBuilder = RetrofitBuilder.api
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMyCampaign()
         initMyPosts()
-        initGrass()
-        Log.d("testtt", "Token : " + preferences.token.toString())
+        getGrassData()
+        getRefreshToken()
     }
 
     private fun initItemTouchListener(adapter: CampaignRecyclerViewAdapter){
@@ -114,20 +125,71 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         })
     }
 
-    private fun initGrass(){
-        val getGrass: Call<GrassResponse> = retrofitBuilder.getGrass("Bearer ${preferences.token!!}")
+    private fun initGrassView(text: String) {
+        val gridLayout = binding?.gridRecord
+        val grass = LayoutInflater.from(requireContext()).inflate(R.layout.grass_layout, gridLayout, false) as TextView
+        val balloon = initTooltip(text)
+        gridLayout?.addView(grass)
+        grass.setOnClickListener {
+            balloon.showAlignTop(it)
+        }
+    }
 
-        getGrass.enqueue(object : Callback<GrassResponse> {
-            override fun onResponse(call: Call<GrassResponse>, response: Response<GrassResponse>) {
-                if(response.isSuccessful){
-//                   Log.d("testtt", "date : " + response.body()!!.data)
-                }else{
-                    Log.d("testtt", "Fail Grass : " + response.errorBody()!!.string())
+    private fun initTooltip(text: String): Balloon {
+        val balloon = createBalloon(requireContext()) {
+            setWidth(BalloonSizeSpec.WRAP)
+            setHeight(BalloonSizeSpec.WRAP)
+            setText(text)
+            setTextColorResource(R.color.white)
+            setTextSize(15f)
+            setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+            setArrowSize(10)
+            setArrowPosition(0.5f)
+            setPadding(12)
+            setCornerRadius(8f)
+            setBackgroundColorResource(R.color.black)
+            setBalloonAnimation(BalloonAnimation.ELASTIC)
+            setLifecycleOwner(lifecycleOwner)
+            build()
+        }
+        return balloon
+    }
+
+    private fun getGrassData(){
+        val getGrass: Call<GrassResponse> = retrofitBuilder.getGrass("Bearer ${preferences.token!!}")
+        CoroutineScope(Dispatchers.Main).launch {
+            binding?.load?.playAnimation()
+            getGrass.enqueue(object : Callback<GrassResponse> {
+                override fun onResponse(call: Call<GrassResponse>, response: Response<GrassResponse>) {
+                    if(response.isSuccessful){
+                        for(i in response.body()!!.data.reversed()){
+                            initGrassView(i.date + ", " + i.count + "회 참여")
+                        }
+                        binding?.load?.apply {
+                            visibility = View.GONE
+                            cancelAnimation()
+                        }
+                    }else{
+                        Log.d("testtt", "Fail Grass : " + response.errorBody()!!.string())
+                    }
                 }
+
+                override fun onFailure(call: Call<GrassResponse>, t: Throwable) {
+                    Log.d("NetWorkError", "${t.message}")
+                }
+            })
+        }
+    }
+
+    private fun getRefreshToken(){
+        RetrofitBuilder.api.getRefreshToken("refreshToken=${preferences.token!!}").enqueue(object: Callback<JsonObject>{
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                Log.d("my token", preferences.token!!)
+                Log.d("get refresh token", response.toString())
             }
 
-            override fun onFailure(call: Call<GrassResponse>, t: Throwable) {
-                Log.d("NetWorkError", "${t.message}")
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                Log.d("get refresh token error", t.message.toString())
             }
         })
     }
