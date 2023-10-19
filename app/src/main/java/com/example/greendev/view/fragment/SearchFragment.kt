@@ -10,7 +10,7 @@ import com.example.greendev.App
 import com.example.greendev.BindingFragment
 import com.example.greendev.R
 import com.example.greendev.RetrofitBuilder
-import com.example.greendev.adapter.CampaignRecyclerViewAdapter
+import com.example.greendev.adapter.CampaignAdapter
 import com.example.greendev.adapter.OnItemClickListener
 import com.example.greendev.databinding.FragmentSearchBinding
 import com.example.greendev.model.AllCampaignResponse
@@ -21,7 +21,7 @@ import retrofit2.Response
 import java.util.Locale
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_search, true) {
-    private lateinit var adapter: CampaignRecyclerViewAdapter
+    private lateinit var adapter: CampaignAdapter
     private lateinit var campaignItem: ArrayList<CampaignData>
     private lateinit var searchItem: ArrayList<CampaignData>
 
@@ -88,7 +88,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                                 data.campaigns[i].campaignId
                             ))
                         }
-                        adapter = CampaignRecyclerViewAdapter(campaignItem, R.layout.campaign_item_layout)
+                        adapter = CampaignAdapter(campaignItem, R.layout.campaign_item_layout)
                         binding?.campaignRecyclerView?.adapter = adapter
                         initApplyFragment()
                     }
