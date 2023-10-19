@@ -18,10 +18,13 @@
 
     <TextView
         android:id="@+id/campaign_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/logo_image"
         app:layout_constraintTop_toTopOf="@+id/logo_image"
+        app:layout_constraintEnd_toStartOf="@+id/date"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:layout_marginStart="20dp"
         android:text="다다익선 캠페인"
         android:textSize="18sp"
