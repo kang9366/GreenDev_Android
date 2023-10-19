@@ -43,7 +43,6 @@
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:layout_marginTop="20dp"
-            android:text="10000명이 1000번 참여했어요"
             android:gravity="center"
             android:fontFamily="@font/gmarketsansttfmedium"
             android:textColor="@color/black"
