@@ -26,6 +26,18 @@ class ApplyFragment(campaignId: Int) : BindingFragment<FragmentApplyBinding>(R.l
         super.onViewCreated(view, savedInstanceState)
         binding?.backButton?.let { returnToPreviousFragment(it) }
         initCampaignDetail()
+        initApply()
+    }
+
+    private fun initApply() {
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        binding?.applyButton?.setOnClickListener {
+            transaction?.apply {
+                replace(R.id.frameLayout, CertificationFragment(campaignId!!))
+                addToBackStack(null)
+                commit()
+            }
+        }
     }
 
     private fun initCampaignDetail(){
@@ -40,10 +52,10 @@ class ApplyFragment(campaignId: Int) : BindingFragment<FragmentApplyBinding>(R.l
                         .error(R.drawable.sample)
                         .into(binding?.campaignImage!!)
 
-                    binding?.titleText?.text = data.title
-                    binding?.title?.text = "캠페인 명 : ${data.title}"
+                    binding?.title?.text = data.title
                     binding?.date?.text = "기간 : ${data.date}"
                     binding?.count?.text = "현재 ${data.joinMemberCount}명이 ${data.joinCount}번 참여중인 캠페인입니다."
+                    binding?.detail?.text = "${data.description}"
                 }
             }
 
