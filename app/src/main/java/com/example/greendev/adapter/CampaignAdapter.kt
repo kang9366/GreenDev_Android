@@ -1,7 +1,6 @@
 package com.example.greendev.adapter
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,7 @@ interface OnItemClickListener{
     fun onItemClick(v: View, data: CampaignData, pos : Int)
 }
 
-class CampaignRecyclerViewAdapter(private var items: ArrayList<CampaignData>, private val layout: Int): RecyclerView.Adapter<CampaignRecyclerViewAdapter.ViewHolder>() {
+class CampaignAdapter(private var items: ArrayList<CampaignData>, private val layout: Int): RecyclerView.Adapter<CampaignAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflatedView = LayoutInflater.from(parent.context).inflate(layout, parent, false)
         return ViewHolder(inflatedView)
