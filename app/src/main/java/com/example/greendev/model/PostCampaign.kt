@@ -14,5 +14,5 @@ data class PostCampaign(
     @SerializedName("joinCount") val joinCount: Int,
     @SerializedName("joinMemberCount") val joinMemberCount: Int,
     @SerializedName("date") val date: String,
-    @SerializedName("campaignImageUrl") val campaignImageUrl: String
+    @SerializedName("imageUrl") val imageUrl: String
 )
