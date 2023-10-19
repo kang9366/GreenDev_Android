@@ -57,7 +57,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/center_line"
-            android:scaleType="fitXY"/>
+            android:layout_marginStart="40dp"
+            android:scaleType="centerCrop"/>
 
         <TextView
             android:id="@+id/duration"
