@@ -1,9 +1,11 @@
 package com.example.greendev
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.LayoutRes
@@ -19,7 +21,7 @@ abstract class BindingFragment<T : ViewDataBinding>(
 ) : Fragment() {
     private var _binding: T? = null
     protected val binding get() = _binding
-    var onBackPressedCallback: OnBackPressedCallback? = null
+    private var onBackPressedCallback: OnBackPressedCallback? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +35,10 @@ abstract class BindingFragment<T : ViewDataBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.lifecycleOwner = viewLifecycleOwner
+        view.setOnClickListener {
+            hideKeyboard()
+            true
+        }
         if(isConnectedBnv){
             initBackpressedListener()
         }
@@ -66,5 +72,10 @@ abstract class BindingFragment<T : ViewDataBinding>(
                 ?.commit()
             activity?.supportFragmentManager?.popBackStack()
         }
+    }
+
+    private fun hideKeyboard() {
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.hideSoftInputFromWindow(view!!.windowToken, 0)
     }
 }
