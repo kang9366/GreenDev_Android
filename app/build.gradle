@@ -52,4 +52,5 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.2"
     implementation "com.github.skydoves:balloon:1.4.6"
     implementation 'sh.tyy:wheelpicker:0.4.0'
+    implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.4'
 }
