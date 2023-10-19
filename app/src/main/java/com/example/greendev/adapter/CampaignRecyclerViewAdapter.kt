@@ -45,6 +45,7 @@ class CampaignRecyclerViewAdapter(private var items: ArrayList<CampaignData>, pr
             id = item.id
             Glide.with(view)
                 .load(item.imageUrl)
+                .error(R.drawable.test)
                 .into(image)
             val pos = adapterPosition
             if(pos!= RecyclerView.NO_POSITION) {
