@@ -5,6 +5,7 @@ import com.example.greendev.model.ApiResponse
 import com.example.greendev.model.BadgeResponse
 import com.example.greendev.model.DetailCampaignResponse
 import com.example.greendev.model.GrassResponse
+import com.example.greendev.model.ImageResponse
 import com.example.greendev.model.PostCampaign
 import com.example.greendev.model.PostCampaignResponse
 import com.example.greendev.model.PostResponse
@@ -37,11 +38,16 @@ interface RetrofitService {
 
     @Multipart
     @POST("api/v1/images")
-    fun postImage(@Part imageFile: MultipartBody.Part, @Header("Authorization") token: String): Call<JsonObject>
+    fun postImage(
+        @Part file: MultipartBody.Part
+    ): Call<ImageResponse>
 
     @POST("api/v1/campaigns")
     fun postCampaign(@Header("Authorization") token: String, @Body campaignData: PostCampaign): Call<PostCampaignResponse>
 
     @GET("api/v1/profile")
     fun getBadgeData(@Header("Authorization") token: String): Call<BadgeResponse>
+
+    @POST("api/v1/token/refresh")
+    fun getRefreshToken(@Header("Cookie") token: String): Call<JsonObject>
 }
