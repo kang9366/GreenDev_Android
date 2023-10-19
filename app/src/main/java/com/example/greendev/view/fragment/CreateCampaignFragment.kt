@@ -1,18 +1,19 @@
 package com.example.greendev.view.fragment
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.icu.util.Calendar
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
@@ -24,37 +25,42 @@ import com.example.greendev.BindingFragment
 import com.example.greendev.R
 import com.example.greendev.RetrofitBuilder
 import com.example.greendev.databinding.FragmentCreateCampaignBinding
+import com.example.greendev.model.ImageResponse
 import com.example.greendev.model.PostCampaign
 import com.example.greendev.model.PostCampaignResponse
+import com.example.greendev.view.dialog.BirthPickerDialog
 import com.example.greendev.view.dialog.CameraActionListener
+import com.example.greendev.view.dialog.DateType
+import com.example.greendev.view.dialog.InitDialogData
 import com.example.greendev.view.dialog.PhotoDialog
-import com.google.gson.JsonObject
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
-import java.io.FileOutputStream
-import java.text.SimpleDateFormat
-import java.util.Locale
+import java.io.ByteArrayOutputStream
 
-class CreateCampaignFragment : BindingFragment<FragmentCreateCampaignBinding>(R.layout.fragment_create_campaign, true), CameraActionListener {
+class CreateCampaignFragment : BindingFragment<FragmentCreateCampaignBinding>(R.layout.fragment_create_campaign, true),
+    CameraActionListener,
+    InitDialogData {
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var dialog: PhotoDialog
-    private val REQUEST_IMAGE_CAPTURE = 1
-    private val CAMERA_PERMISSION_CODE = 101
-    private val retrofitBuilder = RetrofitBuilder.retrofitService
-    private lateinit var image: Bitmap
+    private lateinit var imageUrl: String
+    private val retrofitBuilder = RetrofitBuilder.api
     private var isSelectStartDate: Boolean = false
     private var isSelectEndDate: Boolean = false
-
+    private var isImageSelected: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             if(it != null) {
-                binding?.imageView?.setImageURI(it)
                 dialog.closeDialog()
+                binding?.imageView?.setImageURI(it)
+                val bitmap = uriToBitmap(requireContext(), it)
+                val multipart = bitmapToMultipart(bitmap!!, "test.jpg")
+                postImage(multipart)
             }else {
                 Log.d("test", "사진 선택 안됨")
             }
@@ -64,10 +70,13 @@ class CreateCampaignFragment : BindingFragment<FragmentCreateCampaignBinding>(R.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.startDateButton?.setOnClickListener {
-            initDatePicker(true)
+            val dialog = BirthPickerDialog(this, DateType.START)
+            dialog.initDialog()
         }
+
         binding?.endDateButton?.setOnClickListener {
-            initDatePicker(false)
+            val dialog = BirthPickerDialog(this, DateType.END)
+            dialog.initDialog()
         }
 
         binding?.addPhotoButton?.setOnClickListener {
@@ -76,89 +85,31 @@ class CreateCampaignFragment : BindingFragment<FragmentCreateCampaignBinding>(R.
         }
 
         binding?.postButton?.setOnClickListener {
-            if(checkForm()){
-                val campaignData = PostCampaign(
-                    title = binding?.campaignTitle?.text.toString(),
-                    description = binding?.campaignDescription?.text.toString(),
-                    joinCount = 0,
-                    joinMemberCount = 0,
-                    date = "${binding?.startDateButton?.text.toString()} ~ ${binding?.endDateButton?.text.toString()}",
-                    campaignImageUrl = "https://phinf.pstatic.net/contact/20200623_268/1592901094691BqKER_JPEG/image.jpg"
-                )
-                postCampaign(campaignData)
-            }else{
-                Toast.makeText(requireContext(), "모든 양식을 입력해주세요!", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun initDatePicker(isStart: Boolean) {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        val datePickerDialog = context?.let {
-            DatePickerDialog(
-                it,
-                { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
-                    if(isStart){
-                        binding?.startDateButton?.text = setDate(selectedYear, selectedMonth, selectedDay)
-                        Log.d("testtt", "dateDialog : 날짜 선택함!")
-                        isSelectStartDate = true
-                    }else{
-                        binding?.endDateButton?.text = setDate(selectedYear, selectedMonth, selectedDay)
-                        isSelectEndDate = true
-                    }
-                },
-                year,
-                month,
-                day
-            )
-        }
-        datePickerDialog?.show()
-    }
-
-    private fun setDate(year: Int, month: Int, day: Int): String {
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month, day)
-        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return format.format(calendar.time)
-    }
-
-    private fun checkCameraPermission(): Boolean {
-        val cameraPermission = Manifest.permission.CAMERA
-        val permissionResult = ContextCompat.checkSelfPermission(requireContext(), cameraPermission)
-        return permissionResult == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestCameraPermission() {
-        val cameraPermission = Manifest.permission.CAMERA
-        requestPermissions(arrayOf(cameraPermission), CAMERA_PERMISSION_CODE)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == CAMERA_PERMISSION_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCameraApp()
-            } else {
-                Toast.makeText(requireContext(), "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
-            }
+            createCampaign()
         }
     }
 
     private fun checkForm(): Boolean = binding?.campaignTitle?.text!!.isNotEmpty() &&
             binding?.campaignDescription?.text!!.isNotEmpty() &&
             isSelectStartDate &&
-            isSelectEndDate
+            isSelectEndDate &&
+            isImageSelected
 
-    private fun openCameraApp() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (takePictureIntent.resolveActivity(requireActivity().packageManager) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+    // 이미지 처리 (uri -> bitmap)
+    private fun uriToBitmap(context: Context, uri: Uri): Bitmap? {
+        return context.contentResolver.openInputStream(uri)?.use { inputStream ->
+            BitmapFactory.decodeStream(inputStream)
         }
+    }
+
+    // 이미지 처리 (bitmap -> multipart)
+    private fun bitmapToMultipart(bitmap: Bitmap, fileName: String): MultipartBody.Part {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+
+        val requestBody = byteArray.toRequestBody("image/jpeg".toMediaTypeOrNull(), 0, byteArray.size)
+        return MultipartBody.Part.createFormData("file", fileName, requestBody)
     }
 
     private fun rotateBitmap(bitmap: Bitmap): Bitmap {
@@ -167,55 +118,31 @@ class CreateCampaignFragment : BindingFragment<FragmentCreateCampaignBinding>(R.
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            val bitmap = data?.extras?.get("data") as Bitmap
-            image = rotateBitmap(bitmap)
-            binding?.imageView?.setImageBitmap(rotateBitmap(image))
-        }
-    }
-
-    override fun onCameraAction() {
-        if(checkCameraPermission()){
-            openCameraApp()
-        }else{
-            requestCameraPermission()
-        }
-    }
-
+    // 이미지 post
     private fun postImage(body: MultipartBody.Part){
-        val postImage: Call<JsonObject> = retrofitBuilder.postImage(body, "Bearer ${App.preferences.token!!}")
-        postImage.enqueue(object : Callback<JsonObject>{
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+        retrofitBuilder.postImage(file=body).enqueue(object : Callback<ImageResponse>{
+            override fun onResponse(call: Call<ImageResponse>, response: Response<ImageResponse>) {
                 if(response.isSuccessful){
-                    Log.d("testtt", "post image : " + response.body().toString())
+                    imageUrl = response.body()!!.data.uploadFileUrl
+                    isImageSelected = true
                 }else{
-                    Log.d("testtt", "post image : " + response.errorBody()!!.string())
+                    Log.d("testtt error ", "post image : $response")
                 }
             }
 
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+            override fun onFailure(call: Call<ImageResponse>, t: Throwable) {
                 Log.d("testtt", "post image : " + t.message)
             }
         })
     }
 
-    private fun convertBitmapToFile(bitmap: Bitmap): File {
-        val file = File(context?.filesDir, "picture")
-        val output = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output)
-        return file
-    }
-
+    // 캠페인 정보 post
     private fun postCampaign(data: PostCampaign){
         val postCampaign: Call<PostCampaignResponse> = retrofitBuilder.postCampaign("Bearer ${App.preferences.token!!}", data)
         postCampaign.enqueue(object: Callback<PostCampaignResponse>{
             override fun onResponse(call: Call<PostCampaignResponse>, response: Response<PostCampaignResponse>) {
                 if(response.isSuccessful){
                     Toast.makeText(requireContext(), "캠페인을 등록하였습니다!", Toast.LENGTH_SHORT).show()
-                    Log.d("testtt", "post : " + response.body()!!.data.title)
-                    Log.d("testtt", "post : " + response.body()!!.data.description)
                 }
             }
 
@@ -223,5 +150,78 @@ class CreateCampaignFragment : BindingFragment<FragmentCreateCampaignBinding>(R.
                 TODO("Not yet implemented")
             }
         })
+    }
+
+    private fun createCampaign(){
+        if(checkForm()){
+            val campaignData = PostCampaign(
+                title = binding?.campaignTitle?.text.toString(),
+                description = binding?.campaignDescription?.text.toString(),
+                joinCount = 0,
+                joinMemberCount = 0,
+                date = "${binding?.startDateButton?.text.toString()} ~ ${binding?.endDateButton?.text.toString()}",
+                imageUrl = imageUrl
+            )
+            postCampaign(campaignData)
+        }else{
+            Toast.makeText(requireContext(), "모든 양식을 입력해주세요!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val cameraPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            dialog.closeDialog()
+            initCamera()
+        } else {
+            Toast.makeText(requireContext(), "권한을 거부하였습니다!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            var imageBitmap = result.data?.extras?.get("data") as Bitmap
+            imageBitmap = rotateBitmap(imageBitmap)
+            binding?.imageView?.setImageBitmap(imageBitmap)
+        }
+    }
+
+    @SuppressLint("QueryPermissionsNeeded")
+    private fun initCamera() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (takePictureIntent.resolveActivity(requireContext().packageManager) != null) {
+            takePictureLauncher.launch(takePictureIntent)
+        }
+    }
+
+    override fun onCameraAction() {
+        requestCameraPermission()
+    }
+
+    private fun requestCameraPermission() {
+        when (PackageManager.PERMISSION_GRANTED) {
+            ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) -> {
+                dialog.closeDialog()
+                initCamera()
+            }
+            else -> {
+                cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+        }
+    }
+
+    // 날짜 비교 알고리즘 추가 (종료 날짜가 시작 날짜보다 이전인 경우)
+    override fun initDialogData(data: String, type: DateType) {
+        when (type) {
+            DateType.START -> {
+                binding?.startDateButton?.text = data
+                isSelectStartDate = true
+            }
+            DateType.END -> {
+                binding?.endDateButton?.text = data
+                isSelectEndDate = true
+            }
+        }
     }
 }

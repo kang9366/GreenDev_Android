@@ -16,7 +16,7 @@ import retrofit2.Response
 
 class ApplyFragment(campaignId: Int) : BindingFragment<FragmentApplyBinding>(R.layout.fragment_apply, false) {
     private var campaignId: Int? = null
-    private val retrofitBuilder = RetrofitBuilder.retrofitService
+    private val retrofitBuilder = RetrofitBuilder.api
 
     init {
         this.campaignId = campaignId
