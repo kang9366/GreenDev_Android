@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.greendev.R
 import com.example.greendev.model.RecordData
 
-class RecordRecyclerViewAdapter(private val items: ArrayList<RecordData>): RecyclerView.Adapter<RecordRecyclerViewAdapter.ViewHolder>() {
+class RecordAdapter(private val items: ArrayList<RecordData>): RecyclerView.Adapter<RecordAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflatedView =
             LayoutInflater.from(parent.context).inflate(R.layout.record_item_layout, parent, false)
@@ -26,10 +26,19 @@ class RecordRecyclerViewAdapter(private val items: ArrayList<RecordData>): Recyc
         return items.size
     }
 
+    fun getItem(position: Int): Int {
+        return items[position].postId
+    }
+
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         private var view: View = v
         val campaign_title: TextView = view.findViewById(R.id.campaign_title)
         val message: TextView = view.findViewById(R.id.message)
         val date: TextView = view.findViewById(R.id.date)
+    }
+
+    fun removeItem(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)
     }
 }
