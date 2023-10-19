@@ -13,8 +13,13 @@ import androidx.activity.OnBackPressedCallback
 import com.example.greendev.App.Companion.preferences
 import com.example.greendev.BindingActivity
 import com.example.greendev.R
+import com.example.greendev.RetrofitBuilder
 import com.example.greendev.databinding.ActivityLoginBinding
+import com.example.greendev.model.RefreshTokenResponse
 import com.example.greendev.view.dialog.FinishDialog
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
     private val callback = object : OnBackPressedCallback(true) {
@@ -44,6 +49,20 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         }
     }
 
+    private fun getRefreshToken(){
+        RetrofitBuilder.api.getRefreshToken().enqueue(object:
+            Callback<RefreshTokenResponse> {
+            override fun onResponse(call: Call<RefreshTokenResponse>, response: Response<RefreshTokenResponse>) {
+                Log.d("refreshtoken", response.body()!!.toString())
+                preferences.refreshToken = response.body()!!.data.refreshToken
+            }
+
+            override fun onFailure(call: Call<RefreshTokenResponse>, t: Throwable) {
+                Log.d("get refresh token error", t.message.toString())
+            }
+        })
+    }
+
 
     private fun initLogin(service: String) {
         val webView = WebView(this)
@@ -54,12 +73,11 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
                 println("URL: $newUrl")
                 val accessToken = extractToken(newUrl)
                 if(accessToken!=null){
-                    Log.d("Token", accessToken.toString())
                     preferences.apply {
                         isLogin = true
                         token = accessToken
                     }
-
+                    getRefreshToken()
                     Intent(this@LoginActivity, MainActivity::class.java).apply {
                         startActivity(this)
                     }
