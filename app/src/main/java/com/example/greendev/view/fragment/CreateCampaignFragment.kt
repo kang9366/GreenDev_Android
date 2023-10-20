@@ -143,6 +143,9 @@ class CreateCampaignFragment : BindingFragment<FragmentCreateCampaignBinding>(R.
             override fun onResponse(call: Call<PostCampaignResponse>, response: Response<PostCampaignResponse>) {
                 if(response.isSuccessful){
                     Toast.makeText(requireContext(), "캠페인을 등록하였습니다!", Toast.LENGTH_SHORT).show()
+                    val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                    transaction.replace(R.id.frameLayout, CreateCampaignFragment())
+                    transaction.commit()
                 }
             }
 
@@ -181,9 +184,11 @@ class CreateCampaignFragment : BindingFragment<FragmentCreateCampaignBinding>(R.
 
     private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            var imageBitmap = result.data?.extras?.get("data") as Bitmap
-            imageBitmap = rotateBitmap(imageBitmap)
-            binding?.imageView?.setImageBitmap(imageBitmap)
+            var bitmap = result.data?.extras?.get("data") as Bitmap
+            bitmap = rotateBitmap(bitmap)
+            binding?.imageView?.setImageBitmap(bitmap)
+            val multipart = bitmapToMultipart(bitmap, "test.jpg")
+            postImage(multipart)
         }
     }
 
@@ -211,7 +216,7 @@ class CreateCampaignFragment : BindingFragment<FragmentCreateCampaignBinding>(R.
         }
     }
 
-    // 날짜 비교 알고리즘 추가 (종료 날짜가 시작 날짜보다 이전인 경우)
+    // 날짜 비교 알고리즘 추가해야댐 (종료 날짜가 시작 날짜보다 이전인 경우)
     override fun initDialogData(data: String, type: DateType) {
         when (type) {
             DateType.START -> {

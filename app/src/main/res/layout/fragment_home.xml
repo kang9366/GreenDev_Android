@@ -31,8 +31,21 @@
             android:layout_marginStart="10dp"
             android:textSize="25sp"/>
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/load"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:visibility="visible"
+            app:lottie_rawRes="@raw/loading"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/test"
+            android:id="@+id/view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,6 +53,7 @@
             app:layout_constraintTop_toBottomOf="@+id/title_text">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <TextView
@@ -81,7 +95,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="30dp"
                     android:layout_marginTop="10dp"
-                    tools:listitem="@layout/main_campaign_item_layout"
+                    tools:listitem="@layout/my_campaign_item_layout"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
                 <TextView
@@ -108,19 +122,6 @@
                     android:layout_marginTop="10dp">
                 </GridLayout>
 
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/load"
-                    android:layout_width="170dp"
-                    android:layout_height="170dp"
-                    app:lottie_autoPlay="true"
-                    app:lottie_loop="true"
-                    android:visibility="visible"
-                    app:lottie_rawRes="@raw/loading"
-                    app:layout_constraintStart_toStartOf="@id/grid_record"
-                    app:layout_constraintEnd_toEndOf="@id/grid_record"
-                    app:layout_constraintTop_toTopOf="@id/grid_record"
-                    app:layout_constraintBottom_toBottomOf="@id/grid_record"/>
-
                 <TextView
                     android:id="@+id/mypost"
                     android:layout_width="wrap_content"
@@ -138,7 +139,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="작성한 글이 없습니다."
-                    android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/mypost"

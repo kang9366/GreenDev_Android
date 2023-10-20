@@ -6,6 +6,7 @@ import android.view.DragEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.greendev.App
 import com.example.greendev.BindingFragment
@@ -16,6 +17,7 @@ import com.example.greendev.adapter.ItemTouchCallback
 import com.example.greendev.databinding.FragmentProfileBinding
 import com.example.greendev.model.BadgeData
 import com.example.greendev.model.BadgeResponse
+import com.example.greendev.view.dialog.LogoutDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,6 +33,15 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(R.layout.fragmen
         val itemTouchHelper = ItemTouchHelper(ItemTouchCallback(item))
         itemTouchHelper.attachToRecyclerView(binding?.badgeItemRecyclerView)
         binding?.profileTree?.setOnDragListener(DragListener())
+        initLogout()
+    }
+
+    private fun initLogout() {
+        binding?.logoutButton?.setOnClickListener {
+            val dialog = LogoutDialog(context as AppCompatActivity)
+            dialog.initDialog()
+
+        }
     }
 
     private fun getBadgeData(){

@@ -1,7 +1,5 @@
 package com.example.greendev.adapter
 
-import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +10,9 @@ import com.bumptech.glide.Glide
 import com.example.greendev.R
 import com.example.greendev.model.CampaignData
 
-interface OnItemClickListener{
-    fun onItemClick(v: View, data: CampaignData, pos : Int)
-}
-
-class CampaignRecyclerViewAdapter(private var items: ArrayList<CampaignData>, private val layout: Int): RecyclerView.Adapter<CampaignRecyclerViewAdapter.ViewHolder>() {
+class MyCampaignAdapter(private var items: ArrayList<CampaignData>): RecyclerView.Adapter<MyCampaignAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflatedView = LayoutInflater.from(parent.context).inflate(layout, parent, false)
+        val inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.my_campaign_item_layout, parent, false)
         return ViewHolder(inflatedView)
     }
 
@@ -35,13 +29,11 @@ class CampaignRecyclerViewAdapter(private var items: ArrayList<CampaignData>, pr
         private var view: View = v
         val name: TextView = view.findViewById(R.id.name)
         val writer: TextView = view.findViewById(R.id.writer)
-        val duration: TextView = view.findViewById(R.id.duration)
         val image: ImageView = view.findViewById(R.id.campaign_image)
         var id: Int = 0
         fun bind(item: CampaignData) {
             name.text = item.name
             writer.text = item.writer
-            duration.text = item.duration
             id = item.id
             Glide.with(view)
                 .load(item.imageUrl)
@@ -60,11 +52,5 @@ class CampaignRecyclerViewAdapter(private var items: ArrayList<CampaignData>, pr
 
     fun setOnItemClickListener(listener : OnItemClickListener) {
         this.listener = listener
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setItem(filteredItem: ArrayList<CampaignData>){
-        items = filteredItem
-        notifyDataSetChanged()
     }
 }

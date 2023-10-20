@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_background"
+        android:gravity="center"
+        android:minWidth="350dp"
+        android:minHeight="150dp"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:backgroundTint="#FFFFFF">
+
+        <TextView
+            android:id="@+id/confirmTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:textSize="17sp"
+            android:text="삭제 하시겠습니까?"
+            android:textColor="@color/black"
+            android:fontFamily="@font/gmarketsansttfmedium"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/noButton"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="7dp"
+                android:layout_weight="1"
+                android:text="취소"
+                android:background="@drawable/button_background_line"
+                android:textSize="14sp"/>
+            <Button
+                android:id="@+id/yesButton"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_background_fill"
+                android:backgroundTint="@color/red"
+                android:text="삭제"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

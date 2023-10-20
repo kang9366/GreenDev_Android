@@ -1,43 +1,73 @@
 package com.example.greendev.view.fragment
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.icu.util.Calendar
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.greendev.App
 import com.example.greendev.BindingFragment
 import com.example.greendev.R
+import com.example.greendev.RetrofitBuilder
 import com.example.greendev.databinding.FragmentCertificationBinding
+import com.example.greendev.model.CertificationBody
+import com.example.greendev.model.ImageResponse
+import com.example.greendev.view.dialog.BirthPickerDialog
 import com.example.greendev.view.dialog.CameraActionListener
+import com.example.greendev.view.dialog.DateType
+import com.example.greendev.view.dialog.InitDialogData
 import com.example.greendev.view.dialog.PhotoDialog
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.google.gson.JsonObject
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.ByteArrayOutputStream
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-class CertificationFragment : BindingFragment<FragmentCertificationBinding>(R.layout.fragment_certification, false), CameraActionListener {
+class CertificationFragment(campaignId: Int) : BindingFragment<FragmentCertificationBinding>(R.layout.fragment_certification, false),
+    CameraActionListener,
+    InitDialogData {
+    private var campaignId: Int? = null
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var dialog: PhotoDialog
-    private val REQUEST_IMAGE_CAPTURE = 1
-    private val CAMERA_PERMISSION_CODE = 101
+    private lateinit var imageUrl: String
+    private val retrofitBuilder = RetrofitBuilder.api
+    private var isImageSelected: Boolean = false
+    private var isSelectDate: Boolean = false
+
+    init {
+        this.campaignId = campaignId
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             if(it != null) {
-                binding?.imageView?.setImageURI(it)
                 dialog.closeDialog()
+                binding?.imageView?.setImageURI(it)
+                val bitmap = uriToBitmap(requireContext(), it)
+                val multipart = bitmapToMultipart(bitmap!!, "test.jpg")
+                postImage(multipart)
             }else {
                 Log.d("test", "사진 선택 안됨")
             }
@@ -47,88 +77,147 @@ class CertificationFragment : BindingFragment<FragmentCertificationBinding>(R.la
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.backButton?.let { returnToPreviousFragment(it) }
-        binding?.datePickerButton?.setOnClickListener {
-            initDatePicker()
-        }
+
         binding?.addPhotoButton?.setOnClickListener {
             dialog = PhotoDialog(context as AppCompatActivity, this)
             dialog.initDialog(pickMedia)
         }
-    }
-
-    private fun initDatePicker() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        val datePickerDialog = context?.let {
-            DatePickerDialog(
-                it,
-                { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
-                    binding?.datePickerButton?.text = setDate(selectedYear, selectedMonth, selectedDay)
-                },
-                year,
-                month,
-                day
-            )
+        binding?.datePickerButton?.setOnClickListener {
+            val dialog = BirthPickerDialog(this, DateType.START)
+            dialog.initDialog()
         }
-        datePickerDialog?.show()
+        binding?.postButton?.setOnClickListener {
+            initPostButton()
+        }
     }
 
-    private fun setDate(year: Int, month: Int, day: Int): String {
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month, day)
-        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return format.format(calendar.time)
+    @SuppressLint("NewApi")
+    fun parseToLocalDateTime(input: String): LocalDateTime {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val localDate = LocalDate.parse(input, formatter)
+        return localDate.atStartOfDay()
     }
 
-    private fun checkCameraPermission(): Boolean {
-        val cameraPermission = Manifest.permission.CAMERA
-        val permissionResult = ContextCompat.checkSelfPermission(requireContext(), cameraPermission)
-        return permissionResult == PackageManager.PERMISSION_GRANTED
+    private fun initPostButton() {
+        if(checkForm()) {
+            RetrofitBuilder.api.postCertification(
+                campaignId = campaignId!!,
+                token = "Bearer ${App.preferences.token!!}",
+                certifiationData = CertificationBody(
+                    content = binding?.titleText?.text.toString(),
+                    date = parseToLocalDateTime(binding?.datePickerButton?.text.toString()).toString()+":00",
+                    postImage = imageUrl
+                )
+            ).enqueue(object: Callback<JsonObject>{
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    Toast.makeText(requireContext(), "참여 인증 되었습니다!", Toast.LENGTH_SHORT).show()
+                    requireActivity().supportFragmentManager.popBackStack()
+                    requireActivity().supportFragmentManager.popBackStack()
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+            })
+        }else {
+            Toast.makeText(requireContext(), "모든 양식을 입력해주세요!", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    private fun requestCameraPermission() {
-        val cameraPermission = Manifest.permission.CAMERA
-        requestPermissions(arrayOf(cameraPermission), CAMERA_PERMISSION_CODE)
+    private fun checkForm(): Boolean = binding?.titleText?.text!!.isNotEmpty() &&
+            binding?.description?.text!!.isNotEmpty() &&
+            isSelectDate &&
+            isImageSelected
+
+    // 이미지 처리 (uri -> bitmap)
+    private fun uriToBitmap(context: Context, uri: Uri): Bitmap? {
+        return context.contentResolver.openInputStream(uri)?.use { inputStream ->
+            BitmapFactory.decodeStream(inputStream)
+        }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    // 이미지 처리 (bitmap -> multipart)
+    private fun bitmapToMultipart(bitmap: Bitmap, fileName: String): MultipartBody.Part {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
 
-        if (requestCode == CAMERA_PERMISSION_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCameraApp()
-            } else {
-                // 권한이 거부되었을 때 처리
-                Toast.makeText(requireContext(), "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+        val requestBody = byteArray.toRequestBody("image/jpeg".toMediaTypeOrNull(), 0, byteArray.size)
+        return MultipartBody.Part.createFormData("file", fileName, requestBody)
+    }
+
+    private fun rotateBitmap(bitmap: Bitmap): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(90f)
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    }
+
+    // 이미지 post
+    private fun postImage(body: MultipartBody.Part){
+        retrofitBuilder.postImage(file=body).enqueue(object : Callback<ImageResponse> {
+            override fun onResponse(call: Call<ImageResponse>, response: Response<ImageResponse>) {
+                if(response.isSuccessful){
+                    Log.d("testtt", response.body()!!.toString())
+                    imageUrl = response.body()!!.data.uploadFileUrl
+                    isImageSelected = true
+                }else{
+                    Log.d("testtt error ", "post image : $response")
+                }
             }
+
+            override fun onFailure(call: Call<ImageResponse>, t: Throwable) {
+                Log.d("testtt", "post image : " + t.message)
+            }
+        })
+    }
+
+    private val cameraPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            dialog.closeDialog()
+            initCamera()
+        } else {
+            Toast.makeText(requireContext(), "권한을 거부하였습니다!", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun openCameraApp() {
+    private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            var bitmap = result.data?.extras?.get("data") as Bitmap
+            bitmap = rotateBitmap(bitmap)
+            binding?.imageView?.setImageBitmap(bitmap)
+            val multipart = bitmapToMultipart(bitmap, "test.jpg")
+            postImage(multipart)
+        }
+    }
+
+    @SuppressLint("QueryPermissionsNeeded")
+    private fun initCamera() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (takePictureIntent.resolveActivity(requireActivity().packageManager) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-        }
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-            binding?.imageView?.setImageBitmap(imageBitmap)
-
+        if (takePictureIntent.resolveActivity(requireContext().packageManager) != null) {
+            takePictureLauncher.launch(takePictureIntent)
         }
     }
 
     override fun onCameraAction() {
-        if(checkCameraPermission()){
-            openCameraApp()
-        }else{
-            requestCameraPermission()
+        requestCameraPermission()
+    }
+
+    private fun requestCameraPermission() {
+        when (PackageManager.PERMISSION_GRANTED) {
+            ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) -> {
+                dialog.closeDialog()
+                initCamera()
+            }
+            else -> {
+                cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
         }
+    }
+
+    override fun initDialogData(data: String, type: DateType) {
+        binding?.datePickerButton?.text = data
+        isSelectDate = true
     }
 }

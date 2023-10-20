@@ -24,11 +24,14 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
         <TextView
             android:id="@+id/name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/campaign_image"
             tools:text="다다익선 캠페인"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textColor="@color/main_color"
             android:fontFamily="@font/gmarketsansttfbold"
             android:layout_marginStart="15dp"
