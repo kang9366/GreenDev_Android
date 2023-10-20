@@ -71,6 +71,7 @@ class RecordFragment(campaignId: Int) : BindingFragment<FragmentRecordBinding>(R
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<DetailCampaignResponse>, response: Response<DetailCampaignResponse>) {
                 val data = response.body()!!.data
+                binding?.campaignTitle?.text = data.title
                 binding?.info?.text = "${data.joinMemberCount}명이 ${data.joinCount}번 참여했어요"
             }
 
