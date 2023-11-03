@@ -1,4 +1,4 @@
-package com.example.greendev.view.activity
+package com.devocean.greendev.view.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,8 +7,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.OnBackPressedCallback
-import com.example.greendev.App.Companion.preferences
-import com.example.greendev.R
+import com.devocean.greendev.App.Companion.preferences
+import com.devocean.greendev.R
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
