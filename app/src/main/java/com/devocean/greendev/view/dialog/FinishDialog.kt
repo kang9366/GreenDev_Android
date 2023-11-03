@@ -1,11 +1,11 @@
-package com.example.greendev.view.dialog
+package com.devocean.greendev.view.dialog
 
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
-import com.example.greendev.databinding.FinishDialogBinding
+import com.devocean.greendev.databinding.FinishDialogBinding
 
 class FinishDialog(private val context : AppCompatActivity) {
     private lateinit var binding : FinishDialogBinding
