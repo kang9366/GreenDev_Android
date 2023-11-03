@@ -1,4 +1,4 @@
-package com.example.greendev.adapter
+package com.devocean.greendev.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,11 +6,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.greendev.R
-import com.example.greendev.model.BadgeData
+import com.devocean.greendev.R
+import com.devocean.greendev.model.BadgeData
 
-class BadgeRecyclerViewAdapter(private val items: ArrayList<BadgeData>): RecyclerView.Adapter<BadgeRecyclerViewAdapter.ViewHolder>(),
+class BadgeAdapter(private val items: ArrayList<BadgeData>): RecyclerView.Adapter<BadgeAdapter.ViewHolder>(),
     ItemTouchHelperListener {
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.badge_item, parent, false)
         return ViewHolder(inflatedView)
@@ -19,7 +23,9 @@ class BadgeRecyclerViewAdapter(private val items: ArrayList<BadgeData>): Recycle
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         holder.apply {
-            bind(item)
+            index = position
+            bind(item, position)
+            itemView.tag = this
             itemView.setOnLongClickListener {
                 val clipData = View.DragShadowBuilder(it)
                 it.startDragAndDrop(null, clipData, it, 0)
@@ -34,8 +40,11 @@ class BadgeRecyclerViewAdapter(private val items: ArrayList<BadgeData>): Recycle
 
     inner class ViewHolder(v: View): RecyclerView.ViewHolder(v){
         private var view: View = v
-        val badge: ImageView = view.findViewById(R.id.badgeImage)
-        fun bind(item: BadgeData) {
+        private val badge: ImageView = view.findViewById(R.id.badgeImage)
+        var index: Int = 0
+
+        fun bind(item: BadgeData, position: Int) {
+            index = position
             Glide.with(view)
                 .load(item.imageUrl)
                 .into(badge)
@@ -43,9 +52,6 @@ class BadgeRecyclerViewAdapter(private val items: ArrayList<BadgeData>): Recycle
     }
 
     override fun onItemMove(from: Int, to: Int) {
-        val item = items[from]
-        items.removeAt(from)
-        items.add(to, item)
-        notifyItemMoved(from, to)
+        TODO("Not yet implemented")
     }
 }
