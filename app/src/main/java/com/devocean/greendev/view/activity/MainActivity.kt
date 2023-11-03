@@ -1,14 +1,14 @@
-package com.example.greendev.view.activity
+package com.devocean.greendev.view.activity
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.example.greendev.BindingActivity
-import com.example.greendev.R
-import com.example.greendev.databinding.ActivityMainBinding
-import com.example.greendev.view.fragment.CreateCampaignFragment
-import com.example.greendev.view.fragment.HomeFragment
-import com.example.greendev.view.fragment.ProfileFragment
-import com.example.greendev.view.fragment.SearchFragment
+import com.devocean.greendev.R
+import com.devocean.greendev.databinding.ActivityMainBinding
+import com.devocean.greendev.util.BindingActivity
+import com.devocean.greendev.view.fragment.CreateCampaignFragment
+import com.devocean.greendev.view.fragment.HomeFragment
+import com.devocean.greendev.view.fragment.ProfileFragment
+import com.devocean.greendev.view.fragment.SearchFragment
 
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
