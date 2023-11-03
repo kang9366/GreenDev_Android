@@ -35,18 +35,20 @@
                 android:layout_marginEnd="7dp"
                 android:layout_weight="1"
                 android:text="취소"
+                android:fontFamily="@font/gmarketsansttfmedium"
                 android:background="@drawable/button_background_line"
-                android:textSize="14sp"/>
+                android:textSize="15sp"/>
             <Button
                 android:id="@+id/yesButton"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_background_fill"
-                android:backgroundTint="@color/red"
+                android:backgroundTint="#E31D2E"
+                android:fontFamily="@font/gmarketsansttfmedium"
                 android:text="로그아웃"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 </layout>
