@@ -1,4 +1,4 @@
-package com.example.greendev
+package com.devocean.greendev.util
 
 import android.content.Context
 import android.os.Bundle
@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import com.example.greendev.view.dialog.FinishDialog
+import com.devocean.greendev.view.dialog.FinishDialog
 
 abstract class BindingFragment<T : ViewDataBinding>(
     @LayoutRes val layoutRes: Int,

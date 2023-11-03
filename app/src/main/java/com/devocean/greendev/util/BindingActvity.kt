@@ -1,4 +1,4 @@
-package com.example.greendev
+package com.devocean.greendev.util
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
