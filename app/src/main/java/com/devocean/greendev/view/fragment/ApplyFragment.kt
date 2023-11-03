@@ -1,15 +1,15 @@
-package com.example.greendev.view.fragment
+package com.devocean.greendev.view.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import com.bumptech.glide.Glide
-import com.example.greendev.App
-import com.example.greendev.BindingFragment
-import com.example.greendev.R
-import com.example.greendev.RetrofitBuilder
-import com.example.greendev.databinding.FragmentApplyBinding
-import com.example.greendev.model.DetailCampaignResponse
+import com.devocean.greendev.App
+import com.devocean.greendev.R
+import com.devocean.greendev.databinding.FragmentApplyBinding
+import com.devocean.greendev.model.DetailCampaignResponse
+import com.devocean.greendev.util.BindingFragment
+import com.devocean.greendev.util.RetrofitBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
