@@ -23,6 +23,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GreenDev"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="b4273c09490711d3f80aa800a7888529" />
+
+        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="oauth"
+                    android:scheme="kakao68db8cf69c6b7f6ccc069ecb9d33b365" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.activity.SplashActivity"
             android:exported="true">
