@@ -1,9 +1,8 @@
-package com.example.greendev.adapter
+package com.devocean.greendev.adapter
 
-import android.content.Context
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.greendev.model.BadgeData
+import com.devocean.greendev.model.BadgeData
 
 interface ItemTouchHelperListener {
     fun onItemMove(from: Int, to: Int)
