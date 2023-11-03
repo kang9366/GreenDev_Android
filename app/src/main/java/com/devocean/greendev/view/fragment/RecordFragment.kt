@@ -1,18 +1,18 @@
-package com.example.greendev.view.fragment
+package com.devocean.greendev.view.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import com.example.greendev.App
-import com.example.greendev.BindingFragment
-import com.example.greendev.R
-import com.example.greendev.RetrofitBuilder
-import com.example.greendev.adapter.RecordAdapter
-import com.example.greendev.databinding.FragmentRecordBinding
-import com.example.greendev.model.CampaignPost
-import com.example.greendev.model.CampaignPostResponse
-import com.example.greendev.model.DetailCampaignResponse
-import com.example.greendev.model.RecordData
+import com.devocean.greendev.App
+import com.devocean.greendev.R
+import com.devocean.greendev.adapter.RecordAdapter
+import com.devocean.greendev.databinding.FragmentRecordBinding
+import com.devocean.greendev.model.CampaignPost
+import com.devocean.greendev.model.CampaignPostResponse
+import com.devocean.greendev.model.DetailCampaignResponse
+import com.devocean.greendev.model.RecordData
+import com.devocean.greendev.util.BindingFragment
+import com.devocean.greendev.util.RetrofitBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -54,7 +54,8 @@ class RecordFragment(campaignId: Int) : BindingFragment<FragmentRecordBinding>(R
     }
 
     private fun getCampaignPost() {
-        RetrofitBuilder.api.getCampaignPost(campaignId = campaignId!!, token = "Bearer ${App.preferences.token}").enqueue(object: Callback<CampaignPostResponse>{
+        RetrofitBuilder.api.getCampaignPost(campaignId = campaignId!!, token = "Bearer ${App.preferences.token}")
+            .enqueue(object: Callback<CampaignPostResponse>{
             override fun onResponse(call: Call<CampaignPostResponse>, response: Response<CampaignPostResponse>) {
                 val data = response.body()!!.data.posts
                 initRecyclerView(data)
@@ -67,7 +68,8 @@ class RecordFragment(campaignId: Int) : BindingFragment<FragmentRecordBinding>(R
     }
 
     private fun getDetail() {
-        RetrofitBuilder.api.getDetailCampaign(campaignId = campaignId!!, token = "Bearer ${App.preferences.token}").enqueue(object: Callback<DetailCampaignResponse>{
+        RetrofitBuilder.api.getDetailCampaign(campaignId = campaignId!!, token = "Bearer ${App.preferences.token}")
+            .enqueue(object: Callback<DetailCampaignResponse>{
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<DetailCampaignResponse>, response: Response<DetailCampaignResponse>) {
                 val data = response.body()!!.data
