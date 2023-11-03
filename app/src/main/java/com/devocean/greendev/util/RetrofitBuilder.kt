@@ -1,4 +1,4 @@
-package com.example.greendev
+package com.devocean.greendev.util
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
