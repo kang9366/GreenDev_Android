@@ -1,4 +1,4 @@
-package com.example.greendev.model
+package com.devocean.greendev.model
 
 data class Post(
     val postId: Int,

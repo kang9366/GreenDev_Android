@@ -1,4 +1,4 @@
-package com.example.greendev.adapter
+package com.devocean.greendev.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.greendev.R
-import com.example.greendev.model.CampaignData
+import com.devocean.greendev.R
+import com.devocean.greendev.model.CampaignData
 
 class MyCampaignAdapter(private var items: ArrayList<CampaignData>): RecyclerView.Adapter<MyCampaignAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

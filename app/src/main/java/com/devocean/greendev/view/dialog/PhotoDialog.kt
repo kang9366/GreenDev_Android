@@ -1,4 +1,4 @@
-package com.example.greendev.view.dialog
+package com.devocean.greendev.view.dialog
 
 import android.app.Dialog
 import android.graphics.Color
@@ -10,7 +10,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
-import com.example.greendev.databinding.PhotoDialogBinding
+import com.devocean.greendev.databinding.PhotoDialogBinding
 
 interface CameraActionListener {
     fun onCameraAction()
