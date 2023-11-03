@@ -46,7 +46,8 @@
             android:gravity="center"
             android:fontFamily="@font/gmarketsansttfmedium"
             android:textColor="@color/black"
-            android:textSize="17sp"
+            android:textSize="18sp"
+            android:textStyle="bold"
             android:backgroundTint="#9DC99C"/>
 
 

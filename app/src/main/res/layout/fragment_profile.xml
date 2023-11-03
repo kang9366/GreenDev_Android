@@ -50,7 +50,7 @@
             android:textColor="@color/white"
             android:fontFamily="@font/gmarketsansttfmedium"
             android:background="@drawable/round_background"
-            android:backgroundTint="@color/red"/>
+            android:backgroundTint="#E31D2E"/>
 
         <FrameLayout
             android:id="@+id/profile_tree"

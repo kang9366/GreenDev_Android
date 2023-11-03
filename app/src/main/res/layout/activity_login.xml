@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable
+            name="login"
+            type="com.devocean.greendev.view.activity.LoginActivity" />
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -72,7 +77,8 @@
             android:backgroundTint="@color/black"
             android:drawableLeft="@drawable/github"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"/>
+            android:paddingRight="20dp"
+            android:onClick="@{login.initGithubLogin}"/>
 
         <Button
             android:id="@+id/googleLoginButton"
@@ -114,7 +120,8 @@
             android:backgroundTint="#FEE500"
             android:drawableLeft="@drawable/kakao"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"/>
+            android:paddingRight="20dp"
+            android:onClick="@{login.initKakaoLogin}"/>
 
         <Button
             android:id="@+id/naverLoginButton"
@@ -135,7 +142,8 @@
             android:backgroundTint="#5FC43A"
             android:drawableLeft="@drawable/naver"
             android:paddingLeft="10dp"
-            android:paddingRight="30dp"/>
+            android:paddingRight="30dp"
+            android:onClick="@{login.initNaverLogin}"/>
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/load"
