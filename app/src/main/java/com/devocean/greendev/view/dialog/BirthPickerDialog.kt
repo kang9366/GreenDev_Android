@@ -1,11 +1,10 @@
-package com.example.greendev.view.dialog
+package com.devocean.greendev.view.dialog
 
 import android.app.Dialog
 import android.view.Window
-import com.example.greendev.databinding.DialogBirthPickerBinding
+import com.devocean.greendev.databinding.DialogBirthPickerBinding
 import sh.tyy.wheelpicker.DatePickerView
 import java.util.Calendar
-import java.util.Date
 import android.view.ViewGroup
 import android.view.Gravity
 import android.graphics.Color
@@ -13,14 +12,10 @@ import android.graphics.drawable.ColorDrawable
 import androidx.fragment.app.Fragment
 
 interface InitDialogData {
-    fun initDialogData(data: String, type: DateType)
+    fun initDialogData(data: String)
 }
 
-enum class DateType {
-    START, END
-}
-
-class BirthPickerDialog(private val context: Fragment, private val dateType: DateType) {
+class BirthPickerDialog(private val context: Fragment, private val listener: InitDialogData) {
     private val binding = DialogBirthPickerBinding.inflate(context.layoutInflater)
     private val dialog = Dialog(context.requireContext())
     private val calendar = Calendar.getInstance()
@@ -34,8 +29,7 @@ class BirthPickerDialog(private val context: Fragment, private val dateType: Dat
 
     private fun initSetButton(){
         binding.setButton.setOnClickListener {
-            val listener = context as InitDialogData
-            listener.initDialogData(binding.dateText.text.toString(), dateType)
+            listener.initDialogData(binding.dateText.text.toString())
             dialog.dismiss()
         }
     }
