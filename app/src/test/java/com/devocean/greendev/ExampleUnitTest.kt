@@ -1,4 +1,4 @@
-package com.example.greendev
+package com.devocean.greendev
 
 import org.junit.Test
 
