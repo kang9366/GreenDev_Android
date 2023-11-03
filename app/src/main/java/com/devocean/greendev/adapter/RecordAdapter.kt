@@ -1,12 +1,12 @@
-package com.example.greendev.adapter
+package com.devocean.greendev.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.greendev.R
-import com.example.greendev.model.RecordData
+import com.devocean.greendev.R
+import com.devocean.greendev.model.RecordData
 
 class RecordAdapter(private val items: ArrayList<RecordData>): RecyclerView.Adapter<RecordAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
