@@ -1,4 +1,4 @@
-package com.example.greendev.adapter
+package com.devocean.greendev.adapter
 
 import android.animation.ObjectAnimator
 import android.graphics.Canvas
@@ -10,11 +10,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.greendev.App
-import com.example.greendev.R
-import com.example.greendev.RetrofitBuilder
-import com.example.greendev.view.dialog.DeleteDialog
-import com.example.greendev.view.dialog.DeleteDialogListener
+import com.devocean.greendev.App
+import com.devocean.greendev.R
+import com.devocean.greendev.util.RetrofitBuilder
+import com.devocean.greendev.view.dialog.DeleteDialog
+import com.devocean.greendev.view.dialog.DeleteDialogListener
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
