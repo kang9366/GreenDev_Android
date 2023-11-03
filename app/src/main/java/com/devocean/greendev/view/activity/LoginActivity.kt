@@ -56,7 +56,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
                     Log.d("naver login data", userNickname)
                     Log.d("naver login data", userImage.toString())
 
-                    requestToken(userEmail, userName, userNickname, userImage.toString())
+                    requestToken(userEmail, userName, userNickname, userImage.toString(), "naver")
                 }
 
                 override fun onError(errorCode: Int, message: String) {
@@ -106,6 +106,14 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
                 Log.e("Kakao Login", "카카오계정으로 로그인 실패", error)
             } else if (token != null) {
                 Log.i("Kakao Login", "카카오계정으로 로그인 성공 ${token.accessToken}")
+                UserApiClient.instance.me { user, error ->
+                    if (error != null) {
+                        Log.e("Kakao Login", "사용자 정보 요청 실패", error)
+                    }
+                    else if (user != null) {
+                        requestToken(user.kakaoAccount?.email.toString(), user.kakaoAccount?.name.toString(), user.kakaoAccount?.profileNicknameNeedsAgreement.toString(), user.kakaoAccount?.profileImageNeedsAgreement.toString(), "kakao")
+                    }
+                }
             }
         }
 
@@ -122,9 +130,14 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
                     UserApiClient.instance.loginWithKakaoAccount(this@LoginActivity, callback = callback)
                 } else if (token != null) {
                     Log.i("Kakao Login", "카카오 로그인 성공 ${token.accessToken}")
-//                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-//                    finish()
+                    UserApiClient.instance.me { user, error ->
+                        if (error != null) {
+                            Log.e("Kakao Login", "사용자 정보 요청 실패", error)
+                        }
+                        else if (user != null) {
+                            requestToken(user.kakaoAccount?.email.toString(), user.kakaoAccount?.name.toString(), user.kakaoAccount?.profileNicknameNeedsAgreement.toString(), user.kakaoAccount?.profileImageNeedsAgreement.toString(), "kakao")
+                        }
+                    }
                 }
             }
         } else {
@@ -164,6 +177,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     }
 
     private fun getToken(accessToken: String?) {
+        Log.d("token token", accessToken!!)
         if(accessToken!=null){
             preferences.apply {
                 isLogin = true
@@ -177,8 +191,8 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         }
     }
 
-    private fun requestToken(email: String, name: String, nickName: String, image: String) {
-        RetrofitBuilder.api.naverLogin(LoginBody(email, nickName, name, image)).enqueue(object: Callback<AccessTokenResponse>{
+    private fun requestToken(email: String, name: String, nickName: String, image: String, service: String) {
+        RetrofitBuilder.api.socialLogin(LoginBody(email, nickName, name, image), service).enqueue(object: Callback<AccessTokenResponse>{
             override fun onResponse(
                 call: Call<AccessTokenResponse>,
                 response: Response<AccessTokenResponse>
@@ -194,6 +208,8 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
             }
         })
     }
+
+
 
     private fun extractToken(url: String): String? {
         val uri = Uri.parse(url)
