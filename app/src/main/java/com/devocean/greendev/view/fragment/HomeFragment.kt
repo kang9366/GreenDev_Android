@@ -1,4 +1,4 @@
-package com.example.greendev.view.fragment
+package com.devocean.greendev.view.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -14,27 +14,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.example.greendev.App.Companion.preferences
-import com.example.greendev.BindingFragment
-import com.example.greendev.R
-import com.example.greendev.RetrofitBuilder
-import com.example.greendev.adapter.RecordAdapter
-import com.example.greendev.adapter.MyCampaignAdapter
-import com.example.greendev.adapter.OnItemClickListener
-import com.example.greendev.adapter.SwipeToDeleteCallback
-import com.example.greendev.databinding.FragmentHomeBinding
-import com.example.greendev.model.AccessTokenResponse
-import com.example.greendev.model.ApiResponse
-import com.example.greendev.model.CampaignData
-import com.example.greendev.model.GrassResponse
-import com.example.greendev.model.PostResponse
-import com.example.greendev.model.RecordData
+import com.devocean.greendev.App.Companion.preferences
+import com.devocean.greendev.R
+import com.devocean.greendev.adapter.RecordAdapter
+import com.devocean.greendev.adapter.MyCampaignAdapter
+import com.devocean.greendev.adapter.OnItemClickListener
+import com.devocean.greendev.adapter.SwipeToDeleteCallback
+import com.devocean.greendev.databinding.FragmentHomeBinding
+import com.devocean.greendev.model.AccessTokenResponse
+import com.devocean.greendev.model.ApiResponse
+import com.devocean.greendev.model.CampaignData
+import com.devocean.greendev.model.GrassResponse
+import com.devocean.greendev.model.PostResponse
+import com.devocean.greendev.model.RecordData
+import com.devocean.greendev.util.BindingFragment
+import com.devocean.greendev.util.RetrofitBuilder
 import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import com.skydoves.balloon.createBalloon
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -48,6 +49,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     private lateinit var postAdapter: RecordAdapter
     private val retrofitBuilder = RetrofitBuilder.api
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         GlobalScope.launch(Dispatchers.Main) {
@@ -146,27 +148,19 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
             override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
                 if(response.isSuccessful){
                     val data = response.body()!!.data
-
-                    if(data.count==0){
-                        Log.d("response data", "0000")
-                        binding?.emptyPost?.visibility = View.VISIBLE
-                    }else{
-                        binding?.emptyPost?.visibility = View.GONE
-                        for(i in 0 until response.body()?.data?.count!!){
-                            postItem.add(RecordData(
-                                response.body()!!.data.posts[i].date.split("T")[0],
-                                response.body()!!.data.posts[i].campaignTitle,
-                                response.body()!!.data.posts[i].content,
-                                response.body()!!.data.posts[i].postId)
-                            )
-                        }
-                        postAdapter = RecordAdapter(postItem)
-                        val swipeHandler = SwipeToDeleteCallback(postAdapter, context as AppCompatActivity, binding?.recordRecyclerView!!)
-                        val itemTouchHelper = ItemTouchHelper(swipeHandler)
-                        itemTouchHelper.attachToRecyclerView(binding?.recordRecyclerView)
-                        binding?.recordRecyclerView?.adapter = postAdapter
+                    for(i in 0 until response.body()?.data?.count!!){
+                        postItem.add(RecordData(
+                            data.posts[i].date.split("T")[0],
+                            data.posts[i].campaignTitle,
+                            data.posts[i].content,
+                            data.posts[i].postId)
+                        )
                     }
-                }else{
+                    postAdapter = RecordAdapter(postItem)
+                    val swipeHandler = SwipeToDeleteCallback(postAdapter, context as AppCompatActivity, binding?.recordRecyclerView!!)
+                    val itemTouchHelper = ItemTouchHelper(swipeHandler)
+                    itemTouchHelper.attachToRecyclerView(binding?.recordRecyclerView)
+                    binding?.recordRecyclerView?.adapter = postAdapter
                     reissueToken()
                 }
             }
@@ -225,6 +219,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         CoroutineScope(Dispatchers.Main).launch {
             getGrass.enqueue(object : Callback<GrassResponse> {
                 override fun onResponse(call: Call<GrassResponse>, response: Response<GrassResponse>) {
+                    Log.d("tessttt", response.body()!!.toString())
                     if(response.isSuccessful){
                         for(i in response.body()!!.data.reversed()){
                             initGrassView(i.date + ", " + i.count + "회 참여", i.count)
