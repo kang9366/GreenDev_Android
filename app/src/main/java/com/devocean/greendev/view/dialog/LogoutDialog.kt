@@ -1,4 +1,4 @@
-package com.example.greendev.view.dialog
+package com.devocean.greendev.view.dialog
 
 import android.app.Dialog
 import android.content.Intent
@@ -7,10 +7,10 @@ import android.graphics.drawable.ColorDrawable
 import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.greendev.App
-import com.example.greendev.RetrofitBuilder
-import com.example.greendev.databinding.LogoutDialogBinding
-import com.example.greendev.view.activity.LoginActivity
+import com.devocean.greendev.App
+import com.devocean.greendev.databinding.LogoutDialogBinding
+import com.devocean.greendev.util.RetrofitBuilder
+import com.devocean.greendev.view.activity.LoginActivity
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
