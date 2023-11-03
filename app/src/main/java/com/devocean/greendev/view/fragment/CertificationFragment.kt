@@ -1,4 +1,4 @@
-package com.example.greendev.view.fragment
+package com.devocean.greendev.view.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -20,18 +20,17 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.greendev.App
-import com.example.greendev.BindingFragment
-import com.example.greendev.R
-import com.example.greendev.RetrofitBuilder
-import com.example.greendev.databinding.FragmentCertificationBinding
-import com.example.greendev.model.CertificationBody
-import com.example.greendev.model.ImageResponse
-import com.example.greendev.view.dialog.BirthPickerDialog
-import com.example.greendev.view.dialog.CameraActionListener
-import com.example.greendev.view.dialog.DateType
-import com.example.greendev.view.dialog.InitDialogData
-import com.example.greendev.view.dialog.PhotoDialog
+import com.devocean.greendev.App
+import com.devocean.greendev.R
+import com.devocean.greendev.databinding.FragmentCertificationBinding
+import com.devocean.greendev.model.CertificationBody
+import com.devocean.greendev.model.ImageResponse
+import com.devocean.greendev.util.BindingFragment
+import com.devocean.greendev.util.RetrofitBuilder
+import com.devocean.greendev.view.dialog.BirthPickerDialog
+import com.devocean.greendev.view.dialog.CameraActionListener
+import com.devocean.greendev.view.dialog.InitDialogData
+import com.devocean.greendev.view.dialog.PhotoDialog
 import com.google.gson.JsonObject
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -45,8 +44,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class CertificationFragment(campaignId: Int) : BindingFragment<FragmentCertificationBinding>(R.layout.fragment_certification, false),
-    CameraActionListener,
-    InitDialogData {
+    CameraActionListener {
     private var campaignId: Int? = null
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var dialog: PhotoDialog
@@ -83,12 +81,20 @@ class CertificationFragment(campaignId: Int) : BindingFragment<FragmentCertifica
             dialog.initDialog(pickMedia)
         }
         binding?.datePickerButton?.setOnClickListener {
-            val dialog = BirthPickerDialog(this, DateType.START)
-            dialog.initDialog()
+            setSDate()
         }
         binding?.postButton?.setOnClickListener {
             initPostButton()
         }
+    }
+
+    private fun setSDate() {
+        BirthPickerDialog(this, object : InitDialogData {
+            override fun initDialogData(data: String) {
+                binding?.datePickerButton?.text = data
+                isSelectDate = true
+            }
+        }).initDialog()
     }
 
     @SuppressLint("NewApi")
@@ -214,10 +220,5 @@ class CertificationFragment(campaignId: Int) : BindingFragment<FragmentCertifica
                 cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
             }
         }
-    }
-
-    override fun initDialogData(data: String, type: DateType) {
-        binding?.datePickerButton?.text = data
-        isSelectDate = true
     }
 }
