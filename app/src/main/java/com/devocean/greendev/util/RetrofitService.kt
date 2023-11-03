@@ -44,9 +44,10 @@ interface RetrofitService {
     @GET("api/v1/campaigns/{campaignId}")
     fun getDetailCampaign(@Path("campaignId") campaignId: Int, @Header("Authorization") token: String): Call<DetailCampaignResponse>
 
-    @POST("api/v1/app/token/login/naver")
-    fun naverLogin(
-        @Body data: LoginBody
+    @POST("api/v1/app/token/login/{service}")
+    fun socialLogin(
+        @Body data: LoginBody,
+        @Path("service") service: String
     ): Call<AccessTokenResponse>
 
     @Multipart
