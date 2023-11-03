@@ -1,4 +1,4 @@
-package com.example.greendev.view.fragment
+package com.devocean.greendev.view.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -14,25 +14,25 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.greendev.App
-import com.example.greendev.BindingFragment
-import com.example.greendev.R
-import com.example.greendev.RetrofitBuilder
-import com.example.greendev.databinding.FragmentCreateCampaignBinding
-import com.example.greendev.model.ImageResponse
-import com.example.greendev.model.PostCampaign
-import com.example.greendev.model.PostCampaignResponse
-import com.example.greendev.view.dialog.BirthPickerDialog
-import com.example.greendev.view.dialog.CameraActionListener
-import com.example.greendev.view.dialog.DateType
-import com.example.greendev.view.dialog.InitDialogData
-import com.example.greendev.view.dialog.PhotoDialog
+import com.devocean.greendev.App
+import com.devocean.greendev.R
+import com.devocean.greendev.databinding.FragmentCreateCampaignBinding
+import com.devocean.greendev.model.ImageResponse
+import com.devocean.greendev.model.PostCampaign
+import com.devocean.greendev.model.PostCampaignResponse
+import com.devocean.greendev.util.BindingFragment
+import com.devocean.greendev.util.RetrofitBuilder
+import com.devocean.greendev.view.dialog.BirthPickerDialog
+import com.devocean.greendev.view.dialog.CameraActionListener
+import com.devocean.greendev.view.dialog.InitDialogData
+import com.devocean.greendev.view.dialog.PhotoDialog
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -42,8 +42,7 @@ import retrofit2.Response
 import java.io.ByteArrayOutputStream
 
 class CreateCampaignFragment : BindingFragment<FragmentCreateCampaignBinding>(R.layout.fragment_create_campaign, true),
-    CameraActionListener,
-    InitDialogData {
+    CameraActionListener {
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var dialog: PhotoDialog
     private lateinit var imageUrl: String
@@ -70,13 +69,11 @@ class CreateCampaignFragment : BindingFragment<FragmentCreateCampaignBinding>(R.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.startDateButton?.setOnClickListener {
-            val dialog = BirthPickerDialog(this, DateType.START)
-            dialog.initDialog()
+            setSDate(binding?.startDateButton!!)
         }
 
         binding?.endDateButton?.setOnClickListener {
-            val dialog = BirthPickerDialog(this, DateType.END)
-            dialog.initDialog()
+            setSDate(binding?.endDateButton!!)
         }
 
         binding?.addPhotoButton?.setOnClickListener {
@@ -87,6 +84,14 @@ class CreateCampaignFragment : BindingFragment<FragmentCreateCampaignBinding>(R.
         binding?.postButton?.setOnClickListener {
             createCampaign()
         }
+    }
+
+    private fun setSDate(button: Button) {
+        BirthPickerDialog(this, object : InitDialogData {
+            override fun initDialogData(data: String) {
+                button.text = data
+            }
+        }).initDialog()
     }
 
     private fun checkForm(): Boolean = binding?.campaignTitle?.text!!.isNotEmpty() &&
@@ -212,20 +217,6 @@ class CreateCampaignFragment : BindingFragment<FragmentCreateCampaignBinding>(R.
             }
             else -> {
                 cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-            }
-        }
-    }
-
-    // 날짜 비교 알고리즘 추가해야댐 (종료 날짜가 시작 날짜보다 이전인 경우)
-    override fun initDialogData(data: String, type: DateType) {
-        when (type) {
-            DateType.START -> {
-                binding?.startDateButton?.text = data
-                isSelectStartDate = true
-            }
-            DateType.END -> {
-                binding?.endDateButton?.text = data
-                isSelectEndDate = true
             }
         }
     }
