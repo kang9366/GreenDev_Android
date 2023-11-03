@@ -1,4 +1,4 @@
-package com.example.greendev.adapter
+package com.devocean.greendev.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -8,8 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.greendev.R
-import com.example.greendev.model.CampaignData
+import com.devocean.greendev.R
+import com.devocean.greendev.model.CampaignData
 
 interface OnItemClickListener{
     fun onItemClick(v: View, data: CampaignData, pos : Int)
