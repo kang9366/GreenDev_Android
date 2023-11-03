@@ -1,4 +1,4 @@
-package com.example.greendev.model
+package com.devocean.greendev.model
 
 import android.content.Context
 import android.content.SharedPreferences

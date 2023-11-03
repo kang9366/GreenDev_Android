@@ -1,4 +1,4 @@
-package com.example.greendev.view.fragment
+package com.devocean.greendev.view.fragment
 
 import android.graphics.Color
 import android.os.Bundle
@@ -8,16 +8,16 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.example.greendev.App
-import com.example.greendev.BindingFragment
-import com.example.greendev.adapter.BadgeRecyclerViewAdapter
-import com.example.greendev.R
-import com.example.greendev.RetrofitBuilder
-import com.example.greendev.adapter.ItemTouchCallback
-import com.example.greendev.databinding.FragmentProfileBinding
-import com.example.greendev.model.BadgeData
-import com.example.greendev.model.BadgeResponse
-import com.example.greendev.view.dialog.LogoutDialog
+import com.devocean.greendev.App
+import com.devocean.greendev.adapter.BadgeAdapter
+import com.devocean.greendev.R
+import com.devocean.greendev.adapter.ItemTouchCallback
+import com.devocean.greendev.databinding.FragmentProfileBinding
+import com.devocean.greendev.model.BadgeData
+import com.devocean.greendev.model.BadgeResponse
+import com.devocean.greendev.util.BindingFragment
+import com.devocean.greendev.util.RetrofitBuilder
+import com.devocean.greendev.view.dialog.LogoutDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,7 +56,7 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(R.layout.fragmen
                         for(i in 0 until data.count){
                             item.add(BadgeData(data.badges[i].badgeImageUrl))
                         }
-                        val adapter = BadgeRecyclerViewAdapter(item)
+                        val adapter = BadgeAdapter(item)
                         binding?.badgeItemRecyclerView?.adapter = adapter
                         val itemTouchHelper = ItemTouchHelper(ItemTouchCallback(item))
                         itemTouchHelper.attachToRecyclerView(binding?.badgeItemRecyclerView)
@@ -90,7 +90,7 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(R.layout.fragmen
                     tvParent.removeView(tvState)
                     container.addView(tvState)
 
-                    tvState.x = event.x - tvState.width / 2
+                    tvState.x = event.x -  tvState.width / 2
                     tvState.y = event.y - tvState.height / 2
                     v.visibility = View.VISIBLE
                     return true
